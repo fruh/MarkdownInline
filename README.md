@@ -33,6 +33,7 @@ Repository: https://github.com/fruh/MarkdownInline
 - **Non-blocking** — rendering runs asynchronously with a debounce, and is
   skipped entirely for files longer than `max_lines`.
 
+
 ## Installation
 
 MarkdownInline is not yet on Package Control. To install it manually:
@@ -64,24 +65,31 @@ keep editing. Move the cursor onto a block to see and edit its raw source.
 Settings live in `MarkdownInline.sublime-settings` (defaults shown below) and
 can be overridden in your own `Packages/User/MarkdownInline.sublime-settings`.
 
-| Setting                 | Default | Description                                                                             |
-| ----------------------- | ------- | --------------------------------------------------------------------------------------- |
-| `auto_enable`           | `true`  | Enable the inline preview automatically for Markdown views.                             |
-| `apply_color_scheme`    | `true`  | Apply the bundled "Markdown Inline" color scheme when toggled on.                       |
-| `apply_syntax`          | `true`  | Use the bundled overlay syntax (colors the table continuation marker).                  |
-| `debounce_ms`           | `150`   | Delay before re-rendering after an edit.                                                |
-| `max_lines`             | `5000`  | Skip rendering for files longer than this many lines.                                   |
-| `image_max_width`       | `600`   | Pixel width images are scaled to.                                                       |
-| `render_tables`         | `false` | Draw a rendered copy of tables below the raw source.                                    |
-| `heading_rules`         | `true`  | Draw a thin rule under H1/H2 heading lines.                                             |
-| `align_tables_on_leave` | `true`  | Align a table's columns automatically when the cursor leaves it.                        |
-| `align_tables_on_save`  | `false` | Align table columns automatically when saving.                                          |
-| `table_gap_chars`       | `12`    | Room reserved when wrapping tables so lines don't soft-wrap; raise it if they still do. |
-| `table_margin_px`       | `40`    | Horizontal margin, in pixels, left free when sizing rendered tables.                    |
-| `image_dir`             | `images`  | Directory (relative to the Markdown file) where pasted images are saved.              |
-| `image_name_prefix`     | `pasted_` | Filename prefix for pasted images.                                                     |
-| `image_name_format`     | `%Y%m%d_%H%M%S` | strftime format for the pasted image filename.                                   |
-| `paste_image_command`   | *(empty)* | Optional shell command that writes image bytes to stdout, overriding clipboard-tool auto-detection. |
+| Setting                 | Default         | Description                                                   |
+| ----------------------- | --------------- | ------------------------------------------------------------- |
+| `auto_enable`           | `true`          | Enable the inline preview automatically for Markdown views.   |
+| `apply_color_scheme`    | `true`          | Apply the bundled "Markdown Inline" color scheme when toggled |
+| ↳                       |                 | on.                                                           |
+| `apply_syntax`          | `true`          | Use the bundled overlay syntax (colors the table continuation |
+| ↳                       |                 | marker).                                                      |
+| `debounce_ms`           | `150`           | Delay before re-rendering after an edit.                      |
+| `max_lines`             | `5000`          | Skip rendering for files longer than this many lines.         |
+| `image_max_width`       | `600`           | Pixel width images are scaled to.                             |
+| `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.          |
+| `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                   |
+| `align_tables_on_leave` | `true`          | Align a table's columns automatically when the cursor leaves  |
+| ↳                       |                 | it.                                                           |
+| `align_tables_on_save`  | `false`         | Align table columns automatically when saving.                |
+| `table_gap_chars`       | `12`            | Room reserved when wrapping tables so lines don't soft-wrap;  |
+| ↳                       |                 | raise it if they still do.                                    |
+| `table_margin_px`       | `40`            | Horizontal margin, in pixels, left free when sizing rendered  |
+| ↳                       |                 | tables.                                                       |
+| `image_dir`             | `images`        | Directory (relative to the Markdown file) where pasted images |
+| ↳                       |                 | are saved.                                                    |
+| `image_name_prefix`     | `pasted_`       | Filename prefix for pasted images.                            |
+| `image_name_format`     | `%Y%m%d_%H%M%S` | strftime format for the pasted image filename.                |
+| `paste_image_command`   | *(empty)*       | Optional shell command that writes image bytes to stdout,     |
+| ↳                       |                 | overriding clipboard-tool auto-detection.                     |
 
 ## Pasting images
 
@@ -130,3 +138,7 @@ When the aligner wraps a long cell onto several physical lines, the first cell
 of each continuation line starts with `↳`. `table_rows()` joins those lines back
 into a single logical row, so the marker never affects parsing and can be styled
 independently.
+
+## How it looks like
+
+![pasted_20261016_233719](./images/pasted_20261016_233719.png)
