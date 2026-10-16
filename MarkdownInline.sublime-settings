@@ -1,0 +1,35 @@
+{
+    // Enable the inline preview automatically for Markdown views.
+    "auto_enable": true,
+    // Apply the bundled "Markdown Inline" color scheme when toggled on.
+    "apply_color_scheme": true,
+    // Use the bundled Markdown overlay syntax (colors the table continuation marker).
+    "apply_syntax": true,
+    // Delay before re-rendering after an edit.
+    "debounce_ms": 150,
+    // Skip rendering for files longer than this many lines.
+    "max_lines": 5000,
+    // Pixel width images are scaled to.
+    "image_max_width": 600,
+    // Show a rendered copy of tables below the raw source (no folding).
+    "render_tables": false,
+    // Thin rule under H1/H2 lines (hidden while the cursor is on the line).
+    "heading_rules": true,
+    // Align a table's columns automatically when the cursor leaves it.
+    "align_tables_on_leave": true,
+    // Align table columns automatically when saving.
+    "align_tables_on_save": false,
+    // Room reserved when wrapping tables so lines don't soft-wrap; raise it if they still do.
+    "table_gap_chars": 12,
+    // Horizontal margin, in pixels, left free when sizing rendered tables.
+    "table_margin_px": 40,
+    // Directory (relative to the Markdown file) where pasted images are saved.
+    "image_dir": "images",
+    // Filename prefix for pasted images.
+    "image_name_prefix": "pasted_",
+    // strftime format used for the pasted image filename.
+    "image_name_format": "%Y%m%d_%H%M%S",
+    // Optional shell command that writes image bytes to stdout, overriding
+    // auto-detection of the clipboard tool (e.g. "/opt/homebrew/bin/pngpaste -").
+    "paste_image_command": ""
+}

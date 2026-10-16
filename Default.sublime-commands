@@ -1,0 +1,23 @@
+[
+    {
+        "caption": "Markdown Inline: Toggle Preview",
+        "command": "markdown_inline_toggle"
+    },
+    {
+        "caption": "Markdown Inline: Align Table",
+        "command": "markdown_inline_align_table"
+    },
+    {
+        "caption": "Markdown Inline: Align All Tables",
+        "command": "markdown_inline_align_table",
+        "args": {"all": true}
+    },
+    {
+        "caption": "Markdown Inline: Paste Image",
+        "command": "markdown_inline_paste_image"
+    },
+    {
+        "caption": "Markdown Inline: Debug",
+        "command": "markdown_inline_debug"
+    }
+]

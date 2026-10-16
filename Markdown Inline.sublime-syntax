@@ -1,0 +1,14 @@
+%YAML 1.2
+---
+# Overlay on the stock Markdown syntax: gives the table continuation marker its own scope.
+name: Markdown Inline
+version: 2
+scope: text.html.markdown.inline
+extends: Packages/Markdown/Markdown.sublime-syntax
+hidden: true
+
+contexts:
+  table-cell-content:
+    - meta_prepend: true
+    - match: '↳'
+      scope: punctuation.definition.continuation.table.markdown
