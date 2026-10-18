@@ -39,13 +39,18 @@ Repository: https://github.com/fruh/MarkdownInline
 MarkdownInline is not yet on Package Control. To install it manually:
 
 ```sh
+# linux
 git clone https://github.com/fruh/MarkdownInline.git \
-    ~/.config/sublime-text/Packages/MarkdownInline
+    "$HOME/.config/sublime-text/Packages/MarkdownInline"
+
+# macos
+git clone https://github.com/fruh/MarkdownInline.git \
+    "$HOME/Library/Application Support/Sublime Text/Packages/MarkdownInline"
 ```
 
 On macOS the packages directory is
-`~/Library/Application Support/Sublime Text/Packages`, and on Windows
-`%APPDATA%\Sublime Text\Packages`.
+`~/Library/Application Support/Sublime Text/Packages/MarkdownInline`, and on Windows
+`%APPDATA%\Sublime Text\Packages\MarkdownInline`.
 
 Keep only one copy of the package installed (for example, not both
 `Packages/MarkdownInline` and a copy under `Packages/User/`), otherwise Sublime
