@@ -440,10 +440,20 @@ def render(view):
     for point, checked, line in tasks:
         if intersects_selection(view, line):
             continue
-        glyph, color = ("&#9745;", "#99c794") if checked else ("&#9744;", "#f9c761")
+        color = "#99c794" if checked else "#f9c761"
+        px = view.settings().get("font_size", 12)
+        size = round(px * settings().get("checkbox_scale", 1.1) * 0.7)
+        down = settings().get("checkbox_offset_px", 0)
+        # The inner text is tiny, so the box's baseline is near its bottom edge and
+        # the padding decides where it sits: padding-top grows it upwards from the
+        # text baseline, padding-bottom (the offset) lets it hang below.
+        box = ('<span style="display:inline-block;font-size:1px;width:{0}px;padding-top:{1}px;'
+               'padding-bottom:{2}px;border:2px solid {3};border-radius:3px;'
+               'background-color:{4}">&nbsp;</span>'
+               .format(size, max(0, size - down - 1), down, color, color if checked else "transparent"))
         phantoms.append(sublime.Phantom(
             sublime.Region(point, point),
-            CSS + '<a class="box" href="toggle:{}" style="color:{}">{}&nbsp;</a>'.format(point, color, glyph),
+            CSS + '<a class="box" href="toggle:{}">{}&nbsp;</a>'.format(point, box),
             sublime.LAYOUT_INLINE,
             on_nav,
         ))
