@@ -497,8 +497,8 @@ def render(view):
     for point, checked, line in tasks:
         if intersects_selection(view, line):
             continue
-        px = view.settings().get("font_size", 12)
-        size = max(8, round(px * settings().get("checkbox_scale", 1.6) * 0.7))
+        # follow the rendered line height: font_size means different things per platform
+        size = max(8, round(view.line_height() * settings().get("checkbox_scale", 1.6) * 0.55))
         down = max(0, int(settings().get("checkbox_offset_px", 0)))
         mark = settings().get("checkbox_mark", "check")
         uri = checkbox_png(size, down, bool(checked), mark, "#f9c761")

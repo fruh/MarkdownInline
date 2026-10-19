@@ -13,7 +13,7 @@
     "image_max_width": 600,
     // Show a rendered copy of tables below the raw source (no folding).
     "render_tables": false,
-    // Size of todo-list checkboxes; 1.0 is about as tall as a lowercase letter, 1.6 is the default.
+    // Size of todo-list checkboxes relative to the line height (1.0 is about half a line); 1.6 is the default.
     "checkbox_scale": 1.6,
     // Mark drawn inside a checked checkbox: "check" or "cross".
     "checkbox_mark": "check",
