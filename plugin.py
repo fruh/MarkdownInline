@@ -33,11 +33,16 @@ CONT = "\u21b3"  # marks a continuation line of a wrapped table row (first cell)
 _phantom_sets = {}  # view id -> PhantomSet
 _tokens = {}  # view id -> int, used to debounce
 _active_tables = {}  # view id -> set of start offsets of tables the cursor was in
+_dirty_tables = {}  # view id -> set of start offsets of tables edited while the cursor was in
+_last_change = {}  # view id -> last change_count seen by render()
+_saved_tables = {}  # view id -> set of table texts at the last load or save
 
 
 def plugin_loaded():
     for window in sublime.windows():
         for view in window.views():
+            if is_markdown(view):
+                snapshot_tables(view)
             schedule(view, 0)
 
 
@@ -45,6 +50,10 @@ def plugin_unloaded():
     for window in sublime.windows():
         for view in window.views():
             clear(view)
+
+
+def snapshot_tables(view):
+    _saved_tables[view.id()] = {view.substr(r) for r, _ in find_blocks(view)[0]}
 
 
 def settings():
@@ -399,11 +408,18 @@ def render(view):
     phantoms = []
 
     now_in = {r.begin() for r, _ in tables if intersects_selection(view, r)}
+    count = view.change_count()
+    last = _last_change.get(vid)
+    _last_change[vid] = count
+    prev_dirty = _dirty_tables.get(vid, set())
+    # a table is dirty once the text changed while the cursor was inside it
+    dirty = (prev_dirty & now_in) | (now_in if last is not None and count != last else set())
     left = _active_tables.get(vid, set()) - now_in
     _active_tables[vid] = now_in
+    _dirty_tables[vid] = dirty
     if left and settings().get("align_tables_on_leave", True) and not view.is_read_only():
         starts = {r.begin() for r, _ in tables}
-        for start in sorted(left & starts, reverse=True):
+        for start in sorted(left & starts & prev_dirty, reverse=True):
             view.run_command("markdown_inline_align_table", {"point": start})
 
     def on_nav(href):
@@ -652,6 +668,8 @@ def clipboard_image_bytes():
 
 class MarkdownInlineListener(sublime_plugin.EventListener):
     def on_load_async(self, view):
+        if is_markdown(view):
+            snapshot_tables(view)
         schedule(view, 0)
 
     def on_activated_async(self, view):
@@ -666,13 +684,20 @@ class MarkdownInlineListener(sublime_plugin.EventListener):
             schedule(view, 60)
 
     def on_pre_save(self, view):
-        if is_markdown(view) and settings().get("align_tables_on_save", False):
-            view.run_command("markdown_inline_align_table", {"all": True})
+        if is_markdown(view) and settings().get("align_tables_on_save", True):
+            view.run_command("markdown_inline_align_table", {"modified": True})
+
+    def on_post_save_async(self, view):
+        if is_markdown(view):
+            snapshot_tables(view)
 
     def on_pre_close(self, view):
         clear(view)
         _tokens.pop(view.id(), None)
         _active_tables.pop(view.id(), None)
+        _dirty_tables.pop(view.id(), None)
+        _last_change.pop(view.id(), None)
+        _saved_tables.pop(view.id(), None)
 
 
 class MarkdownInlineToggleCommand(sublime_plugin.TextCommand):
@@ -706,11 +731,14 @@ class MarkdownInlineAlignTableCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
         return is_markdown(self.view)
 
-    def run(self, edit, all=False, point=None):
+    def run(self, edit, all=False, point=None, modified=False):
         view = self.view
         tables = find_blocks(view)[0]
         if point is not None:
             tables = [t for t in tables if t[0].begin() == point]
+        elif modified:
+            saved = _saved_tables.get(view.id(), set())
+            tables = [t for t in tables if view.substr(t[0]) not in saved]
         elif not all:
             tables = [t for t in tables if intersects_selection(view, t[0])]
         # replace bottom-up so earlier regions stay valid

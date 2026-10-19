@@ -25,7 +25,8 @@ Repository: https://github.com/fruh/MarkdownInline
 - **Table previews** — optionally draw a rendered copy of a table below the raw
   source (off by default; see `render_tables`).
 - **Table auto-alignment** — pad and wrap tables into aligned columns when the
-  cursor leaves the table and/or when saving.
+  cursor leaves a table you edited (just reading never changes it) and/or when
+  saving (only tables modified since the last load or save).
 - **Bundled color scheme** — a self-contained dark scheme that dims Markdown
   markers instead of hiding them.
 - **Overlay syntax** — scopes the table continuation marker (`↳`) so it can be
@@ -69,6 +70,12 @@ keep editing. Move the cursor onto a block to see and edit its raw source.
 
 Settings live in `MarkdownInline.sublime-settings` (defaults shown below) and
 can be overridden in your own `Packages/User/MarkdownInline.sublime-settings`.
+Open both side by side via **Preferences → Package Settings → Markdown Inline →
+Settings**, e.g. to stop aligning modified tables on save:
+
+```json
+{ "align_tables_on_save": false }
+```
 
 | Setting                 | Default         | Description                                                   |
 | ----------------------- | --------------- | ------------------------------------------------------------- |
@@ -82,9 +89,9 @@ can be overridden in your own `Packages/User/MarkdownInline.sublime-settings`.
 | `image_max_width`       | `600`           | Pixel width images are scaled to.                             |
 | `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.          |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                   |
-| `align_tables_on_leave` | `true`          | Align a table's columns automatically when the cursor leaves  |
-| ↳                       |                 | it.                                                           |
-| `align_tables_on_save`  | `false`         | Align table columns automatically when saving.                |
+| `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it |
+| ↳                       |                 | was edited.                                                   |
+| `align_tables_on_save`  | `true`          | When saving, align tables modified since the last load/save.  |
 | `table_gap_chars`       | `12`            | Room reserved when wrapping tables so lines don't soft-wrap;  |
 | ↳                       |                 | raise it if they still do.                                    |
 | `table_margin_px`       | `40`            | Horizontal margin, in pixels, left free when sizing rendered  |

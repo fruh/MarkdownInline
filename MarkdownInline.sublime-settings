@@ -15,10 +15,10 @@
     "render_tables": false,
     // Thin rule under H1/H2 lines (hidden while the cursor is on the line).
     "heading_rules": true,
-    // Align a table's columns automatically when the cursor leaves it.
+    // Align a table's columns automatically when the cursor leaves it, but only if it was edited.
     "align_tables_on_leave": true,
-    // Align table columns automatically when saving.
-    "align_tables_on_save": false,
+    // When saving, align the tables modified since the file was loaded or last saved.
+    "align_tables_on_save": true,
     // Room reserved when wrapping tables so lines don't soft-wrap; raise it if they still do.
     "table_gap_chars": 12,
     // Horizontal margin, in pixels, left free when sizing rendered tables.
