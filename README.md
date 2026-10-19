@@ -88,7 +88,8 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `max_lines`             | `5000`          | Skip rendering for files longer than this many lines.         |
 | `image_max_width`       | `600`           | Pixel width images are scaled to.                             |
 | `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.          |
-| `checkbox_scale`        | `1.1`           | Size of todo-list checkboxes (1.0 ≈ letter height).           |
+| `checkbox_scale`        | `1.6`           | Size of todo-list checkboxes (1.0 ≈ letter height).           |
+| `checkbox_mark`         | `"check"`       | Mark inside a checked checkbox: `"check"` or `"cross"`.       |
 | `checkbox_offset_px`    | `0`             | Pixels checkboxes hang below the text baseline (moves down). |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                   |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it |

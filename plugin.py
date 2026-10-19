@@ -1,5 +1,7 @@
 import base64
+import functools
 import html
+import math
 import os
 import re
 import struct
@@ -7,6 +9,7 @@ import subprocess
 import tempfile
 import textwrap
 import time
+import zlib
 from urllib.parse import quote, unquote
 
 import sublime
@@ -378,6 +381,57 @@ CSS = """
 """
 
 
+@functools.lru_cache(maxsize=64)
+def checkbox_png(size, down, checked, mark, color):
+    """data: URI of a checkbox drawn at 2x. The box is size px square with `down`
+    transparent px below it, so the image bottom (on the text baseline) is that much
+    lower than the box bottom."""
+    scale = 2
+    w = size * scale
+    h = (size + down) * scale
+    rgb = tuple(int(color[i:i + 2], 16) for i in (1, 3, 5))
+    stroke = 2 * scale
+    half = w / 2.0
+    radius = 3 * scale
+
+    def seg(px, py, ax, ay, bx, by):
+        dx, dy = bx - ax, by - ay
+        t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+        return math.hypot(px - ax - t * dx, py - ay - t * dy)
+
+    if mark == "cross":
+        lines = [(0.3, 0.3, 0.7, 0.7), (0.7, 0.3, 0.3, 0.7)]
+    else:
+        lines = [(0.24, 0.53, 0.42, 0.71), (0.42, 0.71, 0.76, 0.29)]
+    lines = [tuple(v * w for v in ln) for ln in lines]
+    mark_w = max(3.0, 0.12 * w)
+
+    raw = bytearray()
+    for y in range(h):
+        raw.append(0)
+        for x in range(w):
+            px, py = x + 0.5, y + 0.5
+            qx = abs(px - half) - (half - radius)
+            qy = abs(py - half) - (half - radius)
+            d = math.hypot(max(qx, 0), max(qy, 0)) + min(max(qx, qy), 0) - radius
+            a = 0.5 - (abs(d + stroke / 2.0) - stroke / 2.0) if py <= w else 0.0
+            if checked and py <= w:
+                for ln in lines:
+                    a = max(a, 0.5 - (seg(px, py, *ln) - mark_w / 2.0))
+            raw.extend(rgb)
+            raw.append(int(255 * max(0.0, min(1.0, a))))
+
+    def chunk(tag, data):
+        body = tag + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body) & 0xffffffff)
+
+    png = (b"\x89PNG\r\n\x1a\n"
+           + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
+           + chunk(b"IDAT", zlib.compress(bytes(raw)))
+           + chunk(b"IEND", b""))
+    return "data:image/png;base64," + base64.b64encode(png).decode("ascii")
+
+
 def intersects_selection(view, region):
     for sel in view.sel():
         if sel.intersects(region) or region.contains(sel.b) or region.begin() == sel.b == region.end():
@@ -440,20 +494,15 @@ def render(view):
     for point, checked, line in tasks:
         if intersects_selection(view, line):
             continue
-        color = "#99c794" if checked else "#f9c761"
         px = view.settings().get("font_size", 12)
-        size = round(px * settings().get("checkbox_scale", 1.1) * 0.7)
-        down = settings().get("checkbox_offset_px", 0)
-        # The inner text is tiny, so the box's baseline is near its bottom edge and
-        # the padding decides where it sits: padding-top grows it upwards from the
-        # text baseline, padding-bottom (the offset) lets it hang below.
-        box = ('<span style="display:inline-block;font-size:1px;width:{0}px;padding-top:{1}px;'
-               'padding-bottom:{2}px;border:2px solid {3};border-radius:3px;'
-               'background-color:{4}">&nbsp;</span>'
-               .format(size, max(0, size - down - 1), down, color, color if checked else "transparent"))
+        size = max(8, round(px * settings().get("checkbox_scale", 1.6) * 0.7))
+        down = max(0, int(settings().get("checkbox_offset_px", 0)))
+        mark = settings().get("checkbox_mark", "check")
+        uri = checkbox_png(size, down, bool(checked), mark, "#f9c761")
         phantoms.append(sublime.Phantom(
             sublime.Region(point, point),
-            CSS + '<a class="box" href="toggle:{}">{}&nbsp;</a>'.format(point, box),
+            CSS + '<a class="box" href="toggle:{}"><img src="{}" width="{}" height="{}"></a>&nbsp;'.format(
+                point, uri, size, size + down),
             sublime.LAYOUT_INLINE,
             on_nav,
         ))
