@@ -39,6 +39,7 @@ _active_tables = {}  # view id -> set of start offsets of tables the cursor was 
 _dirty_tables = {}  # view id -> set of start offsets of tables edited while the cursor was in
 _last_change = {}  # view id -> last change_count seen by render()
 _saved_tables = {}  # view id -> set of table texts at the last load or save
+HEADING_KEYS = ["markdown_inline_h{}".format(n) for n in range(1, 7)]
 
 
 def plugin_loaded():
@@ -78,6 +79,8 @@ def clear(view):
     ps = _phantom_sets.pop(vid, None)
     if ps:
         ps.update([])
+    for key in HEADING_KEYS:
+        view.erase_regions(key)
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
     if view.settings().get("syntax") == SYNTAX:
@@ -543,6 +546,16 @@ def render(view):
             CSS + '<hr class="md">',
             sublime.LAYOUT_BLOCK,
         ))
+
+    underline = settings().get("underline_headings", True)
+    for n, key in enumerate(HEADING_KEYS, 1):
+        scope = "markup.heading.{}.markdown".format(n)
+        if underline:
+            # drawn in the scope's scheme color, so it matches the heading
+            view.add_regions(key, view.find_by_selector(scope), scope, "",
+                             sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SOLID_UNDERLINE)
+        else:
+            view.erase_regions(key)
 
     ps.update(phantoms)
 

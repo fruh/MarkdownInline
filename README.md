@@ -91,6 +91,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `checkbox_scale`        | `1.6`           | Size of todo-list checkboxes (1.0 ≈ letter height).           |
 | `checkbox_mark`         | `"check"`       | Mark inside a checked checkbox: `"check"` or `"cross"`.       |
 | `checkbox_offset_px`    | `0`             | Pixels checkboxes hang below the text baseline (moves down). |
+| `underline_headings`    | `true`          | Underline all headings (H1-H6) in their heading color.        |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                   |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it |
 | ↳                       |                 | was edited.                                                   |
