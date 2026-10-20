@@ -67,7 +67,7 @@ Status tags are colored and underlined, which is handy for tracking findings: #t
 
 ## Text formatting
 
-Markers such as **bold**, *italic*, ~~strikethrough~~ and `inline code` are dimmed instead of hidden, so the text stays easy to read and edit. Links look like [this one](https://github.com/fruh/MarkdownInline).
+Markers such as **bold**, *italic*, ~~strikethrough~~ and `inline code` are dimmed instead of hidden, so the text stays easy to read and edit. Links look like [this one](https://github.com/fruh/MarkdownInline) and fold their URL away until you edit the line.
 
 > Blockquotes are set apart in a muted italic color,
 > and their marker is tinted.

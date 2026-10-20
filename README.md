@@ -22,6 +22,8 @@ Repository: https://github.com/fruh/MarkdownInline
   Markdown link. See [Pasting images](#pasting-images).
 - **Heading and horizontal rules** — a thin rule is drawn under H1/H2 headings
   and after `---`. The rule hides while the cursor is on that line.
+- **Collapsed links** — the URL of `[text](url)` links folds to `…`, so only the
+  link text shows. It unfolds while the cursor is on the line. See `fold_links`.
 - **Table previews** — optionally draw a rendered copy of a table below the raw
   source (off by default; see `render_tables`).
 - **Table auto-alignment** — pad and wrap tables into aligned columns when the
@@ -94,6 +96,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `underline_headings`    | `true`          | Underline all headings (H1-H6) in their heading color.         |
 | `highlight_tags`        | `true`          | Underline the tags #todo, #done, #vulnerable, #reported and    |
 | ↳                       |                 | #falsepositive in their color.                                 |
+| `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.  |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                    |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it  |
 | ↳                       |                 | was edited.                                                    |

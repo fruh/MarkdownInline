@@ -40,6 +40,7 @@ _active_tables = {}  # view id -> set of start offsets of tables the cursor was 
 _dirty_tables = {}  # view id -> set of start offsets of tables edited while the cursor was in
 _last_change = {}  # view id -> last change_count seen by render()
 _saved_tables = {}  # view id -> set of table texts at the last load or save
+_link_folded = {}  # view id -> True once link URLs were folded in that view
 _native_paste = False  # True while the plugin runs the real paste itself
 HEADING_KEYS = ["markdown_inline_h{}".format(n) for n in range(1, 7)]
 TAGS = ("todo", "done", "vulnerable", "reported", "falsepositive")
@@ -64,6 +65,11 @@ def snapshot_tables(view):
     _saved_tables[view.id()] = {view.substr(r) for r, _ in find_blocks(view)[0]}
 
 
+def link_url_regions(view):
+    """URLs of inline links and autolinks (not image sources)."""
+    return view.find_by_selector("markup.underline.link.markdown")
+
+
 def settings():
     return sublime.load_settings(SETTINGS_FILE)
 
@@ -85,6 +91,8 @@ def clear(view):
         ps.update([])
     for key in HEADING_KEYS + TAG_KEYS:
         view.erase_regions(key)
+    view.unfold(link_url_regions(view))
+    _link_folded.pop(vid, None)
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
     if view.settings().get("syntax") == SYNTAX:
@@ -571,6 +579,21 @@ def render(view):
         else:
             view.erase_regions(key)
 
+    too_long = view.rowcol(view.size())[0] + 1 > settings().get("max_lines", 20000)
+    if settings().get("fold_links", True) and not too_long:
+        # fold the URL of a link to "..." unless the cursor is on its line (fold is a no-op
+        # for a range that is already folded, so nothing needs to be tracked). Links in
+        # tables stay open: a fold shortens the row and breaks the column alignment.
+        for r in link_url_regions(view):
+            if intersects_selection(view, view.line(r)) \
+                    or any(t.contains(r.begin()) for t, _ in tables):
+                view.unfold(r)
+            else:
+                view.fold(r)
+        _link_folded[vid] = True
+    elif _link_folded.pop(vid, False):
+        view.unfold(link_url_regions(view))
+
     ps.update(phantoms)
 
 
@@ -870,6 +893,11 @@ class MarkdownInlineDebugCommand(sublime_plugin.TextCommand):
         print("[MarkdownInline] color_scheme:", view.settings().get("color_scheme"))
         print("[MarkdownInline] background:", view.style().get("background"))
         print("[MarkdownInline] highlight_tags:", settings().get("highlight_tags", True))
+        links = link_url_regions(view)
+        tables = find_blocks(view)[0]
+        in_tables = [r for r in links if any(t.contains(r.begin()) for t, _ in tables)]
+        print("[MarkdownInline] fold_links:", settings().get("fold_links", True),
+              "- link URLs: {} ({} in tables, left unfolded)".format(len(links), len(in_tables)))
         for tag, key in zip(TAGS, TAG_KEYS):
             regions = view.get_regions(key)
             style = view.style_for_scope("markup.tag.{}.markdown".format(tag))

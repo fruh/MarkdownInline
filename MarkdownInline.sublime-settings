@@ -24,6 +24,9 @@
     // Underline the tags #todo, #done, #vulnerable, #reported and #falsepositive in
     // their color. The tag text is always colored by the scheme (tag_* variables).
     "highlight_tags": true,
+    // Fold the URL of inline links to "..." (shown again while the cursor is on the
+    // line). Links in tables and image sources are left alone.
+    "fold_links": true,
     // Thin rule under H1/H2 lines (hidden while the cursor is on the line).
     "heading_rules": true,
     // Align a table's columns automatically when the cursor leaves it, but only if it was edited.
