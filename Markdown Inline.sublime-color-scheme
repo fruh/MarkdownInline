@@ -53,7 +53,7 @@
         { "name": "Link text", "scope": "meta.link markup.underline.link, string.other.link", "foreground": "var(link)" },
         {
             "name": "Dimmed Markdown markers",
-            "scope": "punctuation.definition.bold.begin.markdown, punctuation.definition.bold.end.markdown, punctuation.definition.italic.begin.markdown, punctuation.definition.italic.end.markdown, punctuation.definition.strikethrough.begin.markdown, punctuation.definition.strikethrough.end.markdown, punctuation.definition.raw.begin.markdown, punctuation.definition.raw.end.markdown, punctuation.definition.raw.code-fence.begin.markdown, punctuation.definition.raw.code-fence.end.markdown, punctuation.definition.link.begin.markdown, punctuation.definition.link.end.markdown, punctuation.definition.metadata.begin.markdown, punctuation.definition.metadata.end.markdown, punctuation.definition.blockquote.markdown, punctuation.definition.image.begin.markdown, punctuation.definition.image.end.markdown, markup.underline.link.markdown, markup.underline.link.image.markdown",
+            "scope": "punctuation.definition.bold.begin.markdown, punctuation.definition.bold.end.markdown, punctuation.definition.italic.begin.markdown, punctuation.definition.italic.end.markdown, punctuation.definition.strikethrough, punctuation.definition.raw.begin.markdown, punctuation.definition.raw.end.markdown, punctuation.definition.raw.code-fence.begin.markdown, punctuation.definition.raw.code-fence.end.markdown, punctuation.definition.link.begin.markdown, punctuation.definition.link.end.markdown, punctuation.definition.metadata.begin.markdown, punctuation.definition.metadata.end.markdown, punctuation.definition.blockquote.markdown, punctuation.definition.image.begin.markdown, punctuation.definition.image.end.markdown, markup.underline.link.markdown, markup.underline.link.image.markdown",
             "foreground": "var(marker)"
         },
         { "name": "H1", "scope": "markup.heading.1.markdown, markup.heading.1.markdown entity.name.section.markdown", "foreground": "#fac761", "font_style": "bold" },
@@ -71,6 +71,7 @@
         { "name": "Table continuation marker", "scope": "punctuation.definition.continuation.table.markdown", "foreground": "#4b5363" },
         { "name": "Table header", "scope": "meta.table.header.markdown-gfm", "font_style": "bold" },
         { "name": "Bold", "scope": "markup.bold.markdown", "foreground": "#ffffff", "font_style": "bold" },
+        { "name": "Strikethrough (muted)", "scope": "markup.strikethrough", "foreground": "#8a93a3" },
         { "name": "Italic", "scope": "markup.italic.markdown", "foreground": "#c0c8d8", "font_style": "italic" },
         { "name": "Inline code", "scope": "markup.raw.inline.markdown", "foreground": "#f0c987", "background": "#ffffff14" }
     ]
