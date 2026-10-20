@@ -4,6 +4,7 @@ import html
 import math
 import os
 import re
+import signal
 import struct
 import subprocess
 import tempfile
@@ -609,6 +610,27 @@ class ToolMissing(Exception):
         self.name = name
 
 
+def run_cmd(cmd, shell=False, capture=True, timeout=10):
+    """(returncode, stdout bytes) of cmd. subprocess.run needs Python 3.5, but
+    Sublime's default plugin host is 3.3, so use Popen. Raises
+    subprocess.TimeoutExpired (a SubprocessError) after `timeout` seconds."""
+    posix = os.name == "posix"
+    proc = subprocess.Popen(cmd, shell=shell, stderr=subprocess.DEVNULL,
+                            stdout=subprocess.PIPE if capture else subprocess.DEVNULL,
+                            start_new_session=posix)
+    try:
+        out, _ = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        try:
+            # kill the whole group: a shell's child would otherwise keep the pipe open
+            os.killpg(proc.pid, signal.SIGKILL) if posix else proc.kill()
+        except OSError:
+            pass
+        proc.communicate()
+        raise
+    return proc.returncode, out or b""
+
+
 def run_bytes(cmd):
     """(bytes, ext) from cmd's stdout (list, or shell string), else None.
 
@@ -617,18 +639,17 @@ def run_bytes(cmd):
     parts = cmd.split() if shell else cmd
     tool = parts[0] if parts else cmd
     try:
-        proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                              timeout=10, shell=shell)
+        returncode, out = run_cmd(cmd, shell=shell)
     except FileNotFoundError:
         raise ToolMissing(tool)
     except (OSError, subprocess.SubprocessError):
         return None
-    if proc.returncode == 127 and shell:
+    if returncode == 127 and shell:
         raise ToolMissing(tool)
-    if proc.returncode != 0:
+    if returncode != 0:
         return None
-    ext = sniff_image(proc.stdout)
-    return (proc.stdout, ext) if ext else None
+    ext = sniff_image(out)
+    return (out, ext) if ext else None
 
 
 def unlink(path):
@@ -657,17 +678,14 @@ def macos_osascript_image():
             "close access theFile"
         ).format(coerce, tmp)
         try:
-            proc = subprocess.run([osascript, "-e", script], stdout=subprocess.DEVNULL,
-                                  stderr=subprocess.DEVNULL, timeout=10)
-            if proc.returncode != 0 or not os.path.getsize(tmp):
+            returncode, _ = run_cmd([osascript, "-e", script], capture=False)
+            if returncode != 0 or not os.path.getsize(tmp):
                 unlink(tmp)
                 continue
             if ext == ".tiff":
                 png = tmp + ".png"
                 try:
-                    subprocess.run([sips, "-s", "format", "png", tmp, "--out", png],
-                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                                   timeout=10)
+                    run_cmd([sips, "-s", "format", "png", tmp, "--out", png], capture=False)
                 except (OSError, subprocess.SubprocessError):
                     pass
                 unlink(tmp)
