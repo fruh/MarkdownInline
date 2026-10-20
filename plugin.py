@@ -755,6 +755,14 @@ class MarkdownInlineListener(sublime_plugin.EventListener):
         if is_enabled(view):
             schedule(view, 60)
 
+    def on_text_command(self, view, command_name, args):
+        # plain paste with an empty text clipboard: look for an image instead
+        if command_name == "paste" and is_markdown(view) \
+                and settings().get("paste_image_on_paste", True) \
+                and not sublime.get_clipboard(1024).strip():
+            return ("markdown_inline_paste_image", None)
+        return None
+
     def on_pre_save(self, view):
         if is_markdown(view) and settings().get("align_tables_on_save", True):
             view.run_command("markdown_inline_align_table", {"modified": True})

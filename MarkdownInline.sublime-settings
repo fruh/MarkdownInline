@@ -31,6 +31,9 @@
     "table_gap_chars": 12,
     // Horizontal margin, in pixels, left free when sizing rendered tables.
     "table_margin_px": 40,
+    // Plain paste (Cmd+V / Ctrl+V) in Markdown files pastes a clipboard image when
+    // the clipboard holds no text. Text pastes are never changed.
+    "paste_image_on_paste": true,
     // Directory (relative to the Markdown file) where pasted images are saved.
     "image_dir": "images",
     // Filename prefix for pasted images.

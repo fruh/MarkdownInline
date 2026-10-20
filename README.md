@@ -100,6 +100,8 @@ Settings**, e.g. to stop aligning modified tables on save:
 | ↳                       |                 | raise it if they still do.                                    |
 | `table_margin_px`       | `40`            | Horizontal margin, in pixels, left free when sizing rendered  |
 | ↳                       |                 | tables.                                                       |
+| `paste_image_on_paste`  | `true`          | Plain Cmd+V / Ctrl+V pastes a clipboard image when there is   |
+| ↳                       |                 | no text on the clipboard.                                     |
 | `image_dir`             | `images`        | Directory (relative to the Markdown file) where pasted images |
 | ↳                       |                 | are saved.                                                    |
 | `image_name_prefix`     | `pasted_`       | Filename prefix for pasted images.                            |
@@ -109,8 +111,13 @@ Settings**, e.g. to stop aligning modified tables on save:
 
 ## Pasting images
 
-Press **Ctrl+Alt+V** (macOS: **Cmd+Alt+V**), or run **Markdown Inline: Paste
-Image** from the command palette. The clipboard is inspected for an image and,
+In a Markdown file, plain **Cmd+V** (Linux/Windows: **Ctrl+V**) pastes an image
+when the clipboard holds an image and no text, for example after a screenshot.
+Text is pasted as usual; turn this off with `paste_image_on_paste`.
+
+To paste an image explicitly, or to paste an image file path or `data:` URI as
+an image, press **Ctrl+Alt+V** (macOS: **Cmd+Alt+V**), or run **Markdown Inline:
+Paste Image** from the command palette. The clipboard is inspected for an image and,
 if one is found, saved into `image_dir` and inserted as a Markdown link:
 
 ```markdown
