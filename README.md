@@ -109,6 +109,43 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `paste_image_command`   | *(empty)*       | Optional shell command that writes image bytes to stdout,     |
 | ↳                       |                 | overriding clipboard-tool auto-detection.                     |
 
+## Colors
+
+The bundled color scheme is built from variables, so you can change a color
+without editing the package. Open **Preferences → Package Settings → Markdown
+Inline → Color Scheme** and put only the variables you want to change in your
+own file on the right (`Packages/User/Markdown Inline.sublime-color-scheme`):
+
+```json
+{
+    "variables": {
+        "h1": "#ff6600",
+        "h3": "#00aaff"
+    }
+}
+```
+
+Sublime merges it over the bundled scheme and reloads it right away.
+
+| Variable       | Default   | Used for                         |
+| -------------- | --------- | -------------------------------- |
+| `h1`           | `#fac761` | H1 headings                      |
+| `h2`           | `#f99157` | H2 headings                      |
+| `h3`           | `#c594c5` | H3 headings                      |
+| `h4`           | `#6699cc` | H4 headings                      |
+| `h5_h6`        | `#99c794` | H5 and H6 headings               |
+| `bold`         | `#ffffff` | bold text                        |
+| `italic`       | `#c0c8d8` | italic text                      |
+| `code`         | `#f0c987` | inline code                      |
+| `quote`        | `#a7b0c0` | blockquote text                  |
+| `quote_marker` | `#5fb3b3` | the `>` of a blockquote          |
+| `strike`       | `#8a93a3` | strikethrough text               |
+| `list_marker`  | `#f99157` | list bullets and numbers         |
+
+The scheme also defines `bg`, `fg`, `marker`, `table_border`, `link` and a few
+more that can be overridden the same way. The checkbox color is drawn by the
+plugin, so it is not part of the scheme.
+
 ## Pasting images
 
 In a Markdown file, plain **Cmd+V** (Linux/Windows: **Ctrl+V**) pastes an image

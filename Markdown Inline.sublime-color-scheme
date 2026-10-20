@@ -13,7 +13,19 @@
         "number": "#f99157",
         "keyword": "#c594c5",
         "func": "#6699cc",
-        "link": "#5fb3b3"
+        "link": "#5fb3b3",
+        "h1": "#fac761",
+        "h2": "#f99157",
+        "h3": "#c594c5",
+        "h4": "#6699cc",
+        "h5_h6": "#99c794",
+        "bold": "#ffffff",
+        "italic": "#c0c8d8",
+        "code": "#f0c987",
+        "quote": "#a7b0c0",
+        "quote_marker": "#5fb3b3",
+        "strike": "#8a93a3",
+        "list_marker": "#f99157"
     },
 
     "globals": {
@@ -56,23 +68,23 @@
             "scope": "punctuation.definition.bold.begin.markdown, punctuation.definition.bold.end.markdown, punctuation.definition.italic.begin.markdown, punctuation.definition.italic.end.markdown, punctuation.definition.strikethrough, punctuation.definition.raw.begin.markdown, punctuation.definition.raw.end.markdown, punctuation.definition.raw.code-fence.begin.markdown, punctuation.definition.raw.code-fence.end.markdown, punctuation.definition.link.begin.markdown, punctuation.definition.link.end.markdown, punctuation.definition.metadata.begin.markdown, punctuation.definition.metadata.end.markdown, punctuation.definition.blockquote.markdown, punctuation.definition.image.begin.markdown, punctuation.definition.image.end.markdown, markup.underline.link.markdown, markup.underline.link.image.markdown",
             "foreground": "var(marker)"
         },
-        { "name": "H1", "scope": "markup.heading.1.markdown, markup.heading.1.markdown entity.name.section.markdown", "foreground": "#fac761", "font_style": "bold" },
-        { "name": "H2", "scope": "markup.heading.2.markdown, markup.heading.2.markdown entity.name.section.markdown", "foreground": "#f99157", "font_style": "bold" },
-        { "name": "H3", "scope": "markup.heading.3.markdown, markup.heading.3.markdown entity.name.section.markdown", "foreground": "#c594c5", "font_style": "bold" },
-        { "name": "H4", "scope": "markup.heading.4.markdown, markup.heading.4.markdown entity.name.section.markdown", "foreground": "#6699cc", "font_style": "bold" },
-        { "name": "H5/H6", "scope": "markup.heading.5.markdown, markup.heading.5.markdown entity.name.section.markdown, markup.heading.6.markdown, markup.heading.6.markdown entity.name.section.markdown", "foreground": "#99c794", "font_style": "bold" },
+        { "name": "H1", "scope": "markup.heading.1.markdown, markup.heading.1.markdown entity.name.section.markdown", "foreground": "var(h1)", "font_style": "bold" },
+        { "name": "H2", "scope": "markup.heading.2.markdown, markup.heading.2.markdown entity.name.section.markdown", "foreground": "var(h2)", "font_style": "bold" },
+        { "name": "H3", "scope": "markup.heading.3.markdown, markup.heading.3.markdown entity.name.section.markdown", "foreground": "var(h3)", "font_style": "bold" },
+        { "name": "H4", "scope": "markup.heading.4.markdown, markup.heading.4.markdown entity.name.section.markdown", "foreground": "var(h4)", "font_style": "bold" },
+        { "name": "H5/H6", "scope": "markup.heading.5.markdown, markup.heading.5.markdown entity.name.section.markdown, markup.heading.6.markdown, markup.heading.6.markdown entity.name.section.markdown", "foreground": "var(h5_h6)", "font_style": "bold" },
         { "name": "Heading fallback", "scope": "markup.heading.markdown, markup.heading.markdown entity.name.section.markdown", "foreground": "var(heading)", "font_style": "bold" },
-        { "name": "List markers", "scope": "punctuation.definition.list_item.markdown, markup.list.numbered.bullet.markdown, markup.list.unnumbered.bullet.markdown", "foreground": "#f99157", "font_style": "bold" },
-        { "name": "Blockquote", "scope": "markup.quote.markdown", "foreground": "#a7b0c0", "font_style": "italic" },
-        { "name": "Blockquote marker", "scope": "punctuation.definition.blockquote.markdown", "foreground": "#5fb3b3" },
+        { "name": "List markers", "scope": "punctuation.definition.list_item.markdown, markup.list.numbered.bullet.markdown, markup.list.unnumbered.bullet.markdown", "foreground": "var(list_marker)", "font_style": "bold" },
+        { "name": "Blockquote", "scope": "markup.quote.markdown", "foreground": "var(quote)", "font_style": "italic" },
+        { "name": "Blockquote marker", "scope": "punctuation.definition.blockquote.markdown", "foreground": "var(quote_marker)" },
         { "name": "Fenced code block", "scope": "markup.raw.block.markdown", "background": "#ffffff0a" },
         { "name": "Link text", "scope": "meta.link.inline.markdown string.other.link.title.markdown, meta.link.reference.markdown string.other.link.title.markdown", "foreground": "var(link)", "font_style": "underline" },
         { "name": "Table borders", "scope": "punctuation.separator.table-cell.markdown, meta.table.header-separator.markdown-gfm, punctuation.section.table-header.markdown, punctuation.definition.table-cell-alignment.markdown", "foreground": "var(table_border)" },
         { "name": "Table continuation marker", "scope": "punctuation.definition.continuation.table.markdown", "foreground": "#4b5363" },
         { "name": "Table header", "scope": "meta.table.header.markdown-gfm", "font_style": "bold" },
-        { "name": "Bold", "scope": "markup.bold.markdown", "foreground": "#ffffff", "font_style": "bold" },
-        { "name": "Strikethrough (muted)", "scope": "markup.strikethrough", "foreground": "#8a93a3" },
-        { "name": "Italic", "scope": "markup.italic.markdown", "foreground": "#c0c8d8", "font_style": "italic" },
-        { "name": "Inline code", "scope": "markup.raw.inline.markdown", "foreground": "#f0c987", "background": "#ffffff14" }
+        { "name": "Bold", "scope": "markup.bold.markdown", "foreground": "var(bold)", "font_style": "bold" },
+        { "name": "Strikethrough (muted)", "scope": "markup.strikethrough", "foreground": "var(strike)" },
+        { "name": "Italic", "scope": "markup.italic.markdown", "foreground": "var(italic)", "font_style": "italic" },
+        { "name": "Inline code", "scope": "markup.raw.inline.markdown", "foreground": "var(code)", "background": "#ffffff14" }
     ]
 }

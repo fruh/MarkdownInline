@@ -27,6 +27,14 @@
                                     "base_file": "${packages}/MarkdownInline/Default ($platform).sublime-keymap",
                                     "default": "[\n\t$0\n]\n"
                                 }
+                            },
+                            {
+                                "caption": "Color Scheme",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/MarkdownInline/Markdown Inline.sublime-color-scheme",
+                                    "default": "{\n\t\"variables\": {\n\t\t$0\n\t}\n}\n"
+                                }
                             }
                         ]
                     }
