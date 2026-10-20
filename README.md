@@ -79,40 +79,35 @@ Settings**, e.g. to stop aligning modified tables on save:
 { "align_tables_on_save": false }
 ```
 
-| Setting                 | Default         | Description                                                    |
-| ----------------------- | --------------- | -------------------------------------------------------------- |
-| `auto_enable`           | `true`          | Enable the inline preview automatically for Markdown views.    |
-| `apply_color_scheme`    | `true`          | Apply the bundled "Markdown Inline" color scheme when toggled  |
-| ↳                       |                 | on.                                                            |
-| `apply_syntax`          | `true`          | Use the bundled overlay syntax (colors the table continuation  |
-| ↳                       |                 | marker).                                                       |
-| `debounce_ms`           | `150`           | Delay before re-rendering after an edit.                       |
-| `max_lines`             | `20000`         | Skip rendering for files longer than this many lines.          |
-| `image_max_width`       | `600`           | Pixel width images are scaled to.                              |
-| `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.           |
-| `checkbox_scale`        | `1.6`           | Checkbox size relative to the line height (1.0 ≈ half a line). |
-| `checkbox_mark`         | `"check"`       | Mark inside a checked checkbox: `"check"` or `"cross"`.        |
-| `checkbox_offset_px`    | `0`             | Pixels checkboxes hang below the text baseline (moves down).   |
-| `underline_headings`    | `true`          | Underline all headings (H1-H6) in their heading color.         |
-| `highlight_tags`        | `true`          | Underline the tags #todo, #done, #vulnerable, #reported and    |
-| ↳                       |                 | #falsepositive in their color.                                 |
-| `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.  |
-| `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                    |
-| `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it  |
-| ↳                       |                 | was edited.                                                    |
-| `align_tables_on_save`  | `true`          | When saving, align tables modified since the last load/save.   |
-| `table_gap_chars`       | `12`            | Room reserved when wrapping tables so lines don't soft-wrap;   |
-| ↳                       |                 | raise it if they still do.                                     |
-| `table_margin_px`       | `40`            | Horizontal margin, in pixels, left free when sizing rendered   |
-| ↳                       |                 | tables.                                                        |
-| `paste_image_on_paste`  | `true`          | Plain Cmd+V / Ctrl+V pastes a clipboard image when there is    |
-| ↳                       |                 | no text on the clipboard.                                      |
-| `image_dir`             | `images`        | Directory (relative to the Markdown file) where pasted images  |
-| ↳                       |                 | are saved.                                                     |
-| `image_name_prefix`     | `pasted_`       | Filename prefix for pasted images.                             |
-| `image_name_format`     | `%Y%m%d_%H%M%S` | strftime format for the pasted image filename.                 |
-| `paste_image_command`   | *(empty)*       | Optional shell command that writes image bytes to stdout,      |
-| ↳                       |                 | overriding clipboard-tool auto-detection.                      |
+| Setting                 | Default         | Description                                                                         |
+| ----------------------- | --------------- | ----------------------------------------------------------------------------------- |
+| `auto_enable`           | `true`          | Enable the inline preview automatically for Markdown views.                         |
+| `apply_color_scheme`    | `true`          | Apply the bundled "Markdown Inline" color scheme when toggled on.                   |
+| `apply_syntax`          | `true`          | Use the bundled overlay syntax (colors the table continuation marker).              |
+| `debounce_ms`           | `150`           | Delay before re-rendering after an edit.                                            |
+| `max_lines`             | `20000`         | Skip rendering for files longer than this many lines.                               |
+| `image_max_width`       | `600`           | Pixel width images are scaled to.                                                   |
+| `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.                                |
+| `checkbox_scale`        | `1.6`           | Checkbox size relative to the line height (1.0 ≈ half a line).                      |
+| `checkbox_mark`         | `"check"`       | Mark inside a checked checkbox: `"check"` or `"cross"`.                             |
+| `checkbox_offset_px`    | `0`             | Pixels checkboxes hang below the text baseline (moves down).                        |
+| `underline_headings`    | `true`          | Underline all headings (H1-H6) in their heading color.                              |
+| `highlight_tags`        | `true`          | Underline the tags #todo, #done, #vulnerable, #reported and #falsepositive in their |
+| ↳                       |                 | color.                                                                              |
+| `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.                       |
+| `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                                         |
+| `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it was edited.           |
+| `align_tables_on_save`  | `true`          | When saving, align tables modified since the last load/save.                        |
+| `table_gap_chars`       | `12`            | Room reserved when wrapping tables so lines don't soft-wrap; raise it if they still |
+| ↳                       |                 | do.                                                                                 |
+| `table_margin_px`       | `40`            | Horizontal margin, in pixels, left free when sizing rendered tables.                |
+| `paste_image_on_paste`  | `true`          | Plain Cmd+V / Ctrl+V pastes a clipboard image when there is no text on the          |
+| ↳                       |                 | clipboard.                                                                          |
+| `image_dir`             | `images`        | Directory (relative to the Markdown file) where pasted images are saved.            |
+| `image_name_prefix`     | `pasted_`       | Filename prefix for pasted images.                                                  |
+| `image_name_format`     | `%Y%m%d_%H%M%S` | strftime format for the pasted image filename.                                      |
+| `paste_image_command`   | *(empty)*       | Optional shell command that writes image bytes to stdout, overriding clipboard-tool |
+| ↳                       |                 | auto-detection.                                                                     |
 
 ## Colors
 
@@ -239,4 +234,4 @@ independently.
 ## How it looks like
 
 
-![pasted_20261020_081631](./images/pasted_20261020_081631.png)
+![pasted_20261020_220019](./images/pasted_20261020_220019.png)
