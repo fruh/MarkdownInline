@@ -8,7 +8,7 @@
     // Delay before re-rendering after an edit.
     "debounce_ms": 150,
     // Skip rendering for files longer than this many lines.
-    "max_lines": 5000,
+    "max_lines": 20000,
     // Pixel width images are scaled to.
     "image_max_width": 600,
     // Show a rendered copy of tables below the raw source (no folding).

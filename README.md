@@ -85,7 +85,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `apply_syntax`          | `true`          | Use the bundled overlay syntax (colors the table continuation |
 | ↳                       |                 | marker).                                                      |
 | `debounce_ms`           | `150`           | Delay before re-rendering after an edit.                      |
-| `max_lines`             | `5000`          | Skip rendering for files longer than this many lines.         |
+| `max_lines`             | `20000`         | Skip rendering for files longer than this many lines.         |
 | `image_max_width`       | `600`           | Pixel width images are scaled to.                             |
 | `render_tables`         | `false`         | Draw a rendered copy of tables below the raw source.          |
 | `checkbox_scale`        | `1.6`           | Checkbox size relative to the line height (1.0 ≈ half a line). |
@@ -150,7 +150,8 @@ plugin, so it is not part of the scheme.
 
 In a Markdown file, plain **Cmd+V** (Linux/Windows: **Ctrl+V**) pastes an image
 when the clipboard holds an image and no text, for example after a screenshot.
-Text is pasted as usual; turn this off with `paste_image_on_paste`.
+Text is pasted as usual, and when there is no image the normal paste runs;
+turn this off with `paste_image_on_paste`.
 
 To paste an image explicitly, or to paste an image file path or `data:` URI as
 an image, press **Ctrl+Alt+V** (macOS: **Cmd+Alt+V**), or run **Markdown Inline:
@@ -173,8 +174,10 @@ Three clipboard forms are supported:
   - **Linux** needs `wl-paste` (Wayland) or `xclip` / `xsel` (X11).
   - **Windows** uses the built-in PowerShell.
 
-If no image is found, nothing is inserted and the status bar says so. If the
-required Linux tool is missing, the message names it and hints at installing it.
+Supported image formats are PNG, JPEG and GIF, recognised by their contents
+rather than the file name. If no image is found, nothing is inserted and the
+status bar says so. If the required Linux tool is missing, the message names it
+and hints at installing it.
 You can also point the feature at your own command with `paste_image_command`
 (e.g. `"/opt/homebrew/bin/pngpaste -"`). The file must be saved first so
 `image_dir` has a base directory.

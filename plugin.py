@@ -40,6 +40,7 @@ _active_tables = {}  # view id -> set of start offsets of tables the cursor was 
 _dirty_tables = {}  # view id -> set of start offsets of tables edited while the cursor was in
 _last_change = {}  # view id -> last change_count seen by render()
 _saved_tables = {}  # view id -> set of table texts at the last load or save
+_native_paste = False  # True while the plugin runs the real paste itself
 HEADING_KEYS = ["markdown_inline_h{}".format(n) for n in range(1, 7)]
 
 
@@ -276,7 +277,7 @@ def align_table(rows, max_chars=None):
 def find_blocks(view):
     """Return (tables, tasks, images, rules, headings) found outside fenced code."""
     lines = view.lines(sublime.Region(0, view.size()))
-    max_lines = settings().get("max_lines", 5000)
+    max_lines = settings().get("max_lines", 20000)
     if len(lines) > max_lines:
         return [], [], [], [], []
     texts = [view.substr(r) for r in lines]
@@ -774,11 +775,12 @@ class MarkdownInlineListener(sublime_plugin.EventListener):
             schedule(view, 60)
 
     def on_text_command(self, view, command_name, args):
-        # plain paste with an empty text clipboard: look for an image instead
-        if command_name == "paste" and is_markdown(view) \
+        # plain paste with an empty text clipboard: look for an image instead. The
+        # size limit must stay large: a clipboard over the limit reads as empty.
+        if command_name == "paste" and not _native_paste and is_markdown(view) \
                 and settings().get("paste_image_on_paste", True) \
-                and not sublime.get_clipboard(1024).strip():
-            return ("markdown_inline_paste_image", None)
+                and not sublime.get_clipboard().strip():
+            return ("markdown_inline_paste_image", {"from_paste": True})
         return None
 
     def on_pre_save(self, view):
@@ -864,28 +866,45 @@ class MarkdownInlineInsertImageCommand(sublime_plugin.TextCommand):
             self.view.replace(edit, sel, link)
 
 
+def native_paste(view):
+    """Run Sublime's own paste without being redirected to the image command again."""
+    global _native_paste
+    _native_paste = True
+    try:
+        view.run_command("paste")
+    finally:
+        _native_paste = False
+
+
 class MarkdownInlinePasteImageCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
         return is_markdown(self.view)
 
-    def run(self, edit):
+    def run(self, edit, from_paste=False):
+        # from_paste: called for a plain paste, so fall back to a normal paste
+        # instead of showing a message when there is no image to insert
         view = self.view
         if not view.file_name():
-            sublime.status_message("Markdown Inline: save the file before pasting an image")
+            if from_paste:
+                native_paste(view)
+            else:
+                sublime.status_message("Markdown Inline: save the file before pasting an image")
             return
-        sublime.get_clipboard_async(lambda text: self._from_text(view, text))
+        sublime.get_clipboard_async(lambda text: self._from_text(view, text, from_paste))
 
-    def _from_text(self, view, text):
+    def _from_text(self, view, text, from_paste=False):
         found = clipboard_text_image(text)
         if found:
             self._save(view, found)
         else:
-            sublime.set_timeout_async(lambda: self._from_raw(view))
+            sublime.set_timeout_async(lambda: self._from_raw(view, from_paste))
 
-    def _from_raw(self, view):
+    def _from_raw(self, view, from_paste=False):
         found, error = clipboard_image_bytes()
         if not found:
-            if error:
+            if from_paste:
+                sublime.set_timeout(lambda: native_paste(view))
+            elif error:
                 sublime.status_message(
                     "Markdown Inline: {0} — install it to paste clipboard images".format(error))
             else:
