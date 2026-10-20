@@ -42,6 +42,8 @@ _last_change = {}  # view id -> last change_count seen by render()
 _saved_tables = {}  # view id -> set of table texts at the last load or save
 _native_paste = False  # True while the plugin runs the real paste itself
 HEADING_KEYS = ["markdown_inline_h{}".format(n) for n in range(1, 7)]
+TAGS = ("todo", "done", "vulnerable", "reported", "falsepositive")
+TAG_KEYS = ["markdown_inline_tag_" + t for t in TAGS]
 
 
 def plugin_loaded():
@@ -81,7 +83,7 @@ def clear(view):
     ps = _phantom_sets.pop(vid, None)
     if ps:
         ps.update([])
-    for key in HEADING_KEYS:
+    for key in HEADING_KEYS + TAG_KEYS:
         view.erase_regions(key)
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
@@ -559,6 +561,16 @@ def render(view):
         else:
             view.erase_regions(key)
 
+    for tag, key in zip(TAGS, TAG_KEYS):
+        # the overlay syntax scopes the tag, the scheme colors the text; the
+        # underline is drawn in the same color
+        scope = "markup.tag.{}.markdown".format(tag)
+        if settings().get("highlight_tags", True):
+            view.add_regions(key, view.find_by_selector(scope), scope, "",
+                             sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SOLID_UNDERLINE)
+        else:
+            view.erase_regions(key)
+
     ps.update(phantoms)
 
 
@@ -857,6 +869,14 @@ class MarkdownInlineDebugCommand(sublime_plugin.TextCommand):
         print("[MarkdownInline] enabled:", is_enabled(view))
         print("[MarkdownInline] color_scheme:", view.settings().get("color_scheme"))
         print("[MarkdownInline] background:", view.style().get("background"))
+        print("[MarkdownInline] highlight_tags:", settings().get("highlight_tags", True))
+        for tag, key in zip(TAGS, TAG_KEYS):
+            regions = view.get_regions(key)
+            style = view.style_for_scope("markup.tag.{}.markdown".format(tag))
+            print("[MarkdownInline] #{}: {} region(s), scope color {}, background {}".format(
+                tag, len(regions), style.get("foreground"), style.get("background")))
+            for r in regions[:3]:
+                print("    {} scope: {}".format(r, view.scope_name(r.begin()).strip()))
         sublime.status_message("Markdown Inline: debug info printed to the console")
 
 

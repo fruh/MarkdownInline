@@ -61,6 +61,10 @@ Long cells wrap into aligned columns; the `↳` marks a continuation line.
 | align_tables_on_save  | Aligns only the tables you changed since   |
 | ↳                     | the file was loaded or last saved.         |
 
+## Tags
+
+Status tags are colored and underlined, which is handy for tracking findings: #todo, #done, #vulnerable, #reported and #falsepositive.
+
 ## Text formatting
 
 Markers such as **bold**, *italic*, ~~strikethrough~~ and `inline code` are dimmed instead of hidden, so the text stays easy to read and edit. Links look like [this one](https://github.com/fruh/MarkdownInline).

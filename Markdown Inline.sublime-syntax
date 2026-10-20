@@ -1,6 +1,7 @@
 %YAML 1.2
 ---
-# Overlay on the stock Markdown syntax: gives the table continuation marker its own scope.
+# Overlay on the stock Markdown syntax: gives the table continuation marker and the
+# status tags (#todo, #done, ...) their own scopes so the color scheme can color them.
 name: Markdown Inline
 version: 2
 scope: text.html.markdown.inline
@@ -12,3 +13,18 @@ contexts:
     - meta_prepend: true
     - match: '↳'
       scope: punctuation.definition.continuation.table.markdown
+
+  # included by paragraphs, lists, block quotes, headings, emphasis and table cells.
+  # the # must start the word, so '# Heading' and URL anchors do not match.
+  markups:
+    - meta_prepend: true
+    - match: '(?i)(?<![^\s(])#todo(?![\w-])'
+      scope: markup.tag.todo.markdown
+    - match: '(?i)(?<![^\s(])#done(?![\w-])'
+      scope: markup.tag.done.markdown
+    - match: '(?i)(?<![^\s(])#vulnerable(?![\w-])'
+      scope: markup.tag.vulnerable.markdown
+    - match: '(?i)(?<![^\s(])#reported(?![\w-])'
+      scope: markup.tag.reported.markdown
+    - match: '(?i)(?<![^\s(])#falsepositive(?![\w-])'
+      scope: markup.tag.falsepositive.markdown

@@ -25,7 +25,12 @@
         "quote": "#a7b0c0",
         "quote_marker": "#5fb3b3",
         "strike": "#8a93a3",
-        "list_marker": "#f99157"
+        "list_marker": "#f99157",
+        "tag_todo": "#f99157",
+        "tag_done": "#99c794",
+        "tag_vulnerable": "#ec5f67",
+        "tag_reported": "#4fd1e0",
+        "tag_falsepositive": "#8a93a3"
     },
 
     "globals": {
@@ -85,6 +90,11 @@
         { "name": "Bold", "scope": "markup.bold.markdown", "foreground": "var(bold)", "font_style": "bold" },
         { "name": "Strikethrough (muted)", "scope": "markup.strikethrough", "foreground": "var(strike)" },
         { "name": "Italic", "scope": "markup.italic.markdown", "foreground": "var(italic)", "font_style": "italic" },
+        { "name": "Tag todo", "scope": "markup.tag.todo.markdown", "foreground": "var(tag_todo)", "font_style": "bold" },
+        { "name": "Tag done", "scope": "markup.tag.done.markdown", "foreground": "var(tag_done)", "font_style": "bold" },
+        { "name": "Tag vulnerable", "scope": "markup.tag.vulnerable.markdown", "foreground": "var(tag_vulnerable)", "font_style": "bold" },
+        { "name": "Tag reported", "scope": "markup.tag.reported.markdown", "foreground": "var(tag_reported)", "font_style": "bold" },
+        { "name": "Tag falsepositive", "scope": "markup.tag.falsepositive.markdown", "foreground": "var(tag_falsepositive)", "font_style": "bold" },
         { "name": "Inline code", "scope": "markup.raw.inline.markdown", "foreground": "var(code)", "background": "#ffffff14" }
     ]
 }
