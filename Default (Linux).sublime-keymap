@@ -1,0 +1,14 @@
+[
+    {
+        "keys": [
+            "ctrl+alt+v"
+        ],
+        "command": "markdown_inline_paste_image",
+        "context": [
+            {
+                "key": "selector",
+                "operand": "text.html.markdown"
+            }
+        ]
+    }
+]

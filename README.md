@@ -142,6 +142,22 @@ You can also point the feature at your own command with `paste_image_command`
 (e.g. `"/opt/homebrew/bin/pngpaste -"`). The file must be saved first so
 `image_dir` has a base directory.
 
+### Changing the shortcut
+
+A plugin setting can't change a key binding, so use Sublime's key bindings:
+open **Preferences → Package Settings → Markdown Inline → Key Bindings** and add
+your own entry on the right, for example:
+
+```json
+[
+    { "keys": ["ctrl+shift+v"], "command": "markdown_inline_paste_image",
+      "context": [{ "key": "selector", "operand": "text.html.markdown" }] }
+]
+```
+
+To free the default keys, add the same keys with `"command": "noop"`. Plain
+**Cmd+V** / **Ctrl+V** needs no binding; turn it off with `paste_image_on_paste`.
+
 ## Commands
 
 Available from the command palette (**Ctrl/Cmd + Shift + P**):
