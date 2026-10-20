@@ -157,4 +157,5 @@ independently.
 
 ## How it looks like
 
-![pasted_20261016_233719](./images/pasted_20261016_233719.png)
+
+![pasted_20261020_081631](./images/pasted_20261020_081631.png)
