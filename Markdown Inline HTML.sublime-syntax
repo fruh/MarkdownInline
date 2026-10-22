@@ -1,0 +1,74 @@
+%YAML 1.2
+---
+# Optional, removable module: HTML-like tags that look like their Markdown twins.
+#   <code>..</code> `..`     <bold>..</bold> **..**     <codeblock>..</codeblock> ``` block
+#   <list>..</list> and <olist>..</olist> (plain lines are items; the bullet or number
+#   is drawn by html_tags.py).
+# Reuses the Markdown scopes so the color scheme needs nothing extra. To remove the
+# feature delete this file and html_tags.py (see README, "HTML-like tags").
+name: Markdown Inline HTML
+version: 2
+scope: text.html.markdown.inline.html
+extends: Packages/MarkdownInline/Markdown Inline.sublime-syntax
+hidden: true
+
+contexts:
+  # the stock main only hands over to 'markdown', where the block rules live; prepend
+  # there so these win over its raw html-blocks rule.
+  markdown:
+    - meta_prepend: true
+    - match: '(?i)^\s*(<codeblock>)\s*$'
+      scope: markup.raw.block.markdown
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+      push: html-codeblock
+    - match: '(?i)^\s*(<list>)\s*$'
+      scope: markup.list.html-unordered.markdown
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+      push: html-list
+    - match: '(?i)^\s*(<olist>)\s*$'
+      scope: markup.list.html-ordered.markdown
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+      push: html-olist
+
+  html-codeblock:
+    - meta_include_prototype: false
+    - meta_content_scope: markup.raw.block.markdown
+    - match: '(?i)^\s*(</codeblock>)'
+      scope: markup.raw.block.markdown
+      captures:
+        1: punctuation.definition.metadata.end.markdown
+      pop: true
+
+  html-list:
+    - meta_content_scope: markup.list.html-unordered.markdown
+    - match: '(?i)(</list>)'
+      scope: markup.list.html-unordered.markdown
+      captures:
+        1: punctuation.definition.metadata.end.markdown
+      pop: true
+    - include: inlines
+
+  html-olist:
+    - meta_content_scope: markup.list.html-ordered.markdown
+    - match: '(?i)(</olist>)'
+      scope: markup.list.html-ordered.markdown
+      captures:
+        1: punctuation.definition.metadata.end.markdown
+      pop: true
+    - include: inlines
+
+  markups:
+    - meta_prepend: true
+    - match: '(?i)(<code>)(.*?)(</code>)'
+      scope: markup.raw.inline.markdown
+      captures:
+        1: punctuation.definition.raw.begin.markdown
+        3: punctuation.definition.raw.end.markdown
+    - match: '(?i)(<bold>)(.*?)(</bold>)'
+      scope: markup.bold.markdown
+      captures:
+        1: punctuation.definition.bold.begin.markdown
+        3: punctuation.definition.bold.end.markdown

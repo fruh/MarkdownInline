@@ -21,6 +21,7 @@ SCHEME = "Packages/MarkdownInline/Markdown Inline.sublime-color-scheme"
 MD_SELECTOR = "text.html.markdown"
 STOCK_SYNTAX = "Packages/Markdown/Markdown.sublime-syntax"
 SYNTAX = "Packages/MarkdownInline/Markdown Inline.sublime-syntax"
+HTML_SYNTAX = "Packages/MarkdownInline/Markdown Inline HTML.sublime-syntax"  # HTML-TAGS
 
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 TASK_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+(\[[ xX]\])")
@@ -70,6 +71,14 @@ def link_url_regions(view):
     return view.find_by_selector("markup.underline.link.markdown")
 
 
+# HTML-TAGS begin
+def overlay_syntax():
+    if settings().get("html_tags", True) and sublime.find_resources("Markdown Inline HTML.sublime-syntax"):
+        return HTML_SYNTAX
+    return SYNTAX
+# HTML-TAGS end
+
+
 def settings():
     return sublime.load_settings(SETTINGS_FILE)
 
@@ -95,7 +104,7 @@ def clear(view):
     _link_folded.pop(vid, None)
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
-    if view.settings().get("syntax") == SYNTAX:
+    if view.settings().get("syntax") in (SYNTAX, HTML_SYNTAX):  # HTML-TAGS
         view.assign_syntax(STOCK_SYNTAX)
 
 
@@ -465,9 +474,12 @@ def render(view):
     if settings().get("apply_color_scheme", True) \
             and view.settings().get("color_scheme") != SCHEME:
         view.settings().set("color_scheme", SCHEME)
-    if settings().get("apply_syntax", True) and view.settings().get("syntax") == STOCK_SYNTAX \
+    if settings().get("apply_syntax", True) \
+            and view.settings().get("syntax") in (STOCK_SYNTAX, SYNTAX, HTML_SYNTAX) \
             and sublime.find_resources("Markdown Inline.sublime-syntax"):
-        view.assign_syntax(SYNTAX)
+        wanted = overlay_syntax()  # HTML-TAGS
+        if view.settings().get("syntax") != wanted:
+            view.assign_syntax(wanted)
 
     ps = _phantom_sets.get(vid)
     if ps is None:
@@ -892,6 +904,7 @@ class MarkdownInlineDebugCommand(sublime_plugin.TextCommand):
         print("[MarkdownInline] enabled:", is_enabled(view))
         print("[MarkdownInline] color_scheme:", view.settings().get("color_scheme"))
         print("[MarkdownInline] background:", view.style().get("background"))
+        print("[MarkdownInline] html_tags overlay:", overlay_syntax() == HTML_SYNTAX)  # HTML-TAGS
         print("[MarkdownInline] highlight_tags:", settings().get("highlight_tags", True))
         links = link_url_regions(view)
         tables = find_blocks(view)[0]

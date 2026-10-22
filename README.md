@@ -95,6 +95,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `highlight_tags`        | `true`          | Underline the tags #todo, #done, #vulnerable, #reported and #falsepositive in their |
 | ↳                       |                 | color.                                                                              |
 | `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.                       |
+| `html_tags`             | `true`          | Enable the optional HTML-like tags (see below).                |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                                         |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it was edited.           |
 | `align_tables_on_save`  | `true`          | When saving, align tables modified since the last load/save.                        |
@@ -158,6 +159,29 @@ The tags `#todo` (orange), `#done` (green), `#vulnerable` (red), `#reported`
 same color. The `#` has to start the word, so `# Heading`, `#anchor` in a URL,
 inline code and code blocks are left alone. The text color comes from the
 `tag_*` variables above; turn the underline off with `highlight_tags`.
+
+## HTML-like tags
+
+An optional module lets these tags look like their Markdown twins. The tags are
+dimmed and nothing is rewritten or hidden:
+
+| Tag                         | Same as           | Placement           |
+| --------------------------- | ----------------- | ------------------- |
+| `<code>text</code>`         | `` `text` ``      | one line            |
+| `<bold>text</bold>`         | `**text**`        | one line            |
+| `<codeblock>` … `</codeblock>` | a fenced block | own lines           |
+| `<list>` … `</list>`        | bullet list       | each line is an item |
+| `<olist>` … `</olist>`      | numbered list     | each line is an item |
+
+Tags are case-insensitive and are recognised at the top level (not inside quotes
+or other lists). The bullets and numbers are drawn as phantoms, so they are not
+part of the text and hide while the cursor is on the line. Turn it off with
+`html_tags`.
+
+To remove the module for good, delete `Markdown Inline HTML.sublime-syntax` and
+`html_tags.py`, then delete the lines marked `HTML-TAGS` in `plugin.py` (use
+`SYNTAX` where `overlay_syntax()` is called), the `html_tags` setting and this
+section.
 
 ## Pasting images
 

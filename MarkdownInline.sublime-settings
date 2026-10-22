@@ -27,6 +27,9 @@
     // Fold the URL of inline links to "..." (shown again while the cursor is on the
     // line). Links in tables and image sources are left alone.
     "fold_links": true,
+    // Optional HTML-like tags <code>, <bold>, <codeblock>, <list>, <olist> that look
+    // like their Markdown twins (needs the "Markdown Inline HTML" syntax file).
+    "html_tags": true,
     // Thin rule under H1/H2 lines (hidden while the cursor is on the line).
     "heading_rules": true,
     // Align a table's columns automatically when the cursor leaves it, but only if it was edited.

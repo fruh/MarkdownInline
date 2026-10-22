@@ -36,11 +36,12 @@ Tables are aligned into neat columns when you leave one you edited, or when you 
 
 Long cells wrap into aligned columns; the `↳` marks a continuation line.
 
-| Setting               | What it does                                                                                             |
-| --------------------- | -------------------------------------------------------------------------------------------------------- |
-| align_tables_on_leave | Aligns a table when the cursor leaves it, but only if you edited it. Reading a file never rewrites a     |
-| ↳                     | table, and long cells are wrapped so the row fits the window.                                            |
-| align_tables_on_save  | Aligns only the tables you changed since the file was loaded or last saved.                              |
+| Setting               | What it does                                                                      |
+| --------------------- | --------------------------------------------------------------------------------- |
+| align_tables_on_leave | Aligns a table when the cursor leaves it, but only if you edited it. Reading a    |
+| ↳                     | file never rewrites a table, and long cells are wrapped so the row fits the       |
+| ↳                     | window.                                                                           |
+| align_tables_on_save  | Aligns only the tab les you changed since the file was loaded or last saved.      |
 
 ## Tags
 
@@ -69,3 +70,21 @@ def hello(name):
 ```
 
 
+
+## HTML-like tags
+
+Use <code>code</code> and <bold>bold</bold> inline, or whole blocks:
+
+<list>
+First bullet
+Second bullet with <bold>bold</bold>
+</list>
+
+<olist>
+First step
+Second step
+</olist>
+
+<codeblock>
+print("same look as a fenced block")
+</codeblock>
