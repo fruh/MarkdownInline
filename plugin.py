@@ -48,7 +48,8 @@ TAGS = ("todo", "done", "vulnerable", "reported", "falsepositive")
 TAG_KEYS = ["markdown_inline_tag_" + t for t in TAGS]
 HL_COLORS = ("yellow", "red", "blue", "green")
 HL_KEYS = ["markdown_inline_hl_" + c for c in HL_COLORS]
-HL_RE = re.compile(r"@@HL(?:\(([^)]*)\))?@@(.*?)@@ENDHL@@", re.I)
+HL_RE = re.compile(r"@@HL(?:\(([^)]*)\))?@@(.*?)@@ENDHL@@", re.I | re.S)
+HL_MARKER_SELECTOR = "meta.highlight-marker.markdown"
 _hl_folded = {}  # view id -> True once highlight markers were folded in that view
 
 
@@ -97,29 +98,44 @@ def is_enabled(view):
     return view.settings().get("markdown_inline.enabled", settings().get("auto_enable", True))
 
 
+def fence_blocks(view):
+    """Return [(offset, text)] for the content between fence lines of fenced code blocks."""
+    blocks = []
+    start = None
+    for line in view.lines(sublime.Region(0, view.size())):
+        if FENCE_RE.match(view.substr(line)):
+            if start is None:
+                start = line.end() + 1
+            else:
+                blocks.append((start, view.substr(sublime.Region(start, line.begin()))))
+                start = None
+    return blocks
+
+
 def fence_highlights(view):
     """Return ({color: [text regions]}, [marker regions]) for @@HL(color)@@..@@ENDHL@@
-    inside fenced code blocks; the stock syntax hands those to the language syntax, so
-    the overlay syntax cannot scope them."""
+    inside fenced code blocks (may span lines; an unclosed one is ignored). The stock
+    syntax hands those blocks to the language syntax, so the overlay syntax cannot
+    scope them."""
     texts = {c: [] for c in HL_COLORS}
     markers = []
     if view.find("@@HL", 0, sublime.LITERAL | sublime.IGNORECASE) is None:
         return texts, markers
-    in_fence = False
-    for line in view.lines(sublime.Region(0, view.size())):
-        text = view.substr(line)
-        if FENCE_RE.match(text):
-            in_fence = not in_fence
-        elif in_fence and "@@" in text:
-            for m in HL_RE.finditer(text):
-                color = (m.group(1) or "").strip().lower()
-                if color not in texts:
-                    color = "yellow"
-                base = line.begin()
-                texts[color].append(sublime.Region(base + m.start(2), base + m.end(2)))
-                markers.append(sublime.Region(base + m.start(), base + m.start(2)))
-                markers.append(sublime.Region(base + m.end(2), base + m.end()))
+    for base, text in fence_blocks(view):
+        if "@@" not in text:
+            continue
+        for m in HL_RE.finditer(text):
+            color = (m.group(1) or "").strip().lower()
+            if color not in texts:
+                color = "yellow"
+            texts[color].append(sublime.Region(base + m.start(2), base + m.end(2)))
+            markers.append(sublime.Region(base + m.start(), base + m.start(2)))
+            markers.append(sublime.Region(base + m.end(2), base + m.end()))
     return texts, markers
+
+
+def highlight_marker_regions(view):
+    return list(view.find_by_selector(HL_MARKER_SELECTOR)) + fence_highlights(view)[1]
 
 
 def clear(view):
@@ -132,7 +148,7 @@ def clear(view):
     view.unfold(link_url_regions(view))
     _link_folded.pop(vid, None)
     if _hl_folded.pop(vid, False):
-        view.unfold(fence_highlights(view)[1])
+        view.unfold(highlight_marker_regions(view))
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
     if view.settings().get("syntax") in (SYNTAX, HTML_SYNTAX):  # HTML-TAGS
@@ -637,23 +653,33 @@ def render(view):
     elif _link_folded.pop(vid, False):
         view.unfold(link_url_regions(view))
 
-    if settings().get("highlight_in_fences", True) and not too_long:
-        # the fill is drawn in the foreground of the "<color>.fill" scope, behind the code
-        texts, markers = fence_highlights(view)
-        for color, key in zip(HL_COLORS, HL_KEYS):
+    fill = settings().get("highlight_in_fences", True) and not too_long
+    fold = settings().get("fold_highlight_markers", True) and not too_long
+    texts, fence_markers = fence_highlights(view) if (fill or fold) else ({}, [])
+    for color, key in zip(HL_COLORS, HL_KEYS):
+        if fill:
+            # the fill is drawn in the foreground of the "<color>.fill" scope, behind the code
             view.add_regions(key, texts[color], "markup.highlight.{}.fill.markdown".format(color),
                              "", sublime.DRAW_NO_OUTLINE)
+        else:
+            view.erase_regions(key)
+    if fold:
+        # hide the @@HL@@ markers unless the cursor is on their line; in tables they stay
+        # (like links, a fold would shorten the row and break the alignment)
+        markers = [r for r in view.find_by_selector(HL_MARKER_SELECTOR)
+                   if not any(t.contains(r.begin()) for t, _ in tables)]
+        if fill:
+            markers += fence_markers
+        else:
+            view.unfold(fence_markers)
         for r in markers:
             if intersects_selection(view, view.line(r)):
                 view.unfold(r)
             else:
                 view.fold(r)
         _hl_folded[vid] = True
-    else:
-        for key in HL_KEYS:
-            view.erase_regions(key)
-        if _hl_folded.pop(vid, False):
-            view.unfold(fence_highlights(view)[1])
+    elif _hl_folded.pop(vid, False):
+        view.unfold(highlight_marker_regions(view))
 
     ps.update(phantoms)
 

@@ -96,6 +96,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | ↳                       |                 | color.                                                                              |
 | `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.                       |
 | `highlight_in_fences`   | `true`          | Color `@@HL@@` highlights inside fenced code blocks.           |
+| `fold_highlight_markers` | `true`         | Hide highlight markers unless the cursor is on their line.     |
 | `html_tags`             | `true`          | Enable the optional HTML-like tags (see below).                |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                                         |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it was edited.           |
@@ -178,8 +179,11 @@ lists, headings, tables, the HTML-like raw blocks and fenced code blocks.
 ```
 
 The colors are `red`, `yellow`, `blue` and `green`; `@@HL@@`, `@@HL()@@` and unknown
-names are yellow. The markers are dimmed, and the highlight must close on the same line;
-the text inside is colored but not parsed as Markdown. Inside fenced ``` blocks the text
+names are yellow. The markers fold away while the cursor is on another line (`fold_highlight_markers`;
+they stay visible in tables, where a fold would break the column alignment). Outside code the highlight must close on
+the same line; inside fenced ``` blocks and the raw HTML-like blocks it may span several
+lines (an unclosed one stops at the end of the block). The text inside is colored but not
+parsed as Markdown. Inside fenced ``` blocks the text
 keeps its language colors on top of a colored fill and the markers are hidden while the
 cursor is elsewhere (`highlight_in_fences`). Backgrounds come from `highlight_bg`,
 `hl_red`, `hl_blue` and `hl_green`, text from `highlight_fg`.
@@ -196,7 +200,7 @@ dimmed and nothing is rewritten or hidden:
 | `<codeblock>` … `</codeblock>` | a fenced block | own lines           |
 | `<request>` … `</request>`  | code block, blue tint | own lines        |
 | `<response>` … `</response>` | code block, green tint | own lines       |
-| `<highlight>text</highlight>` | yellow highlight | one line, only inside `<codeblock>`, `<request>`, `<response>` |
+| `<highlight>text</highlight>` | yellow highlight | only inside `<codeblock>`, `<request>`, `<response>` and fenced ``` blocks; may span lines there |
 | `<list>` … `</list>`        | bullet list       | each line is an item |
 | `<olist>` … `</olist>`      | numbered list     | each line is an item |
 

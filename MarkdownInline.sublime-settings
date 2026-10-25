@@ -30,6 +30,9 @@
     // Color @@HL(red)@@text@@ENDHL@@ highlights inside fenced ``` blocks (the markers are
     // hidden while the cursor is elsewhere). Elsewhere the syntax colors them.
     "highlight_in_fences": true,
+    // Hide the markers of highlights (@@HL(color)@@ ... @@ENDHL@@, <highlight>) while the
+    // cursor is on another line. Markers inside tables always stay visible.
+    "fold_highlight_markers": true,
     // Optional HTML-like tags <code>, <bold>, <codeblock>, <list>, <olist> that look
     // like their Markdown twins (needs the "Markdown Inline HTML" syntax file).
     "html_tags": true,

@@ -34,27 +34,27 @@ contexts:
   highlight-markers:
     - match: '(?i)(@@HL\(red\)@@)(.*?)(@@ENDHL@@)'
       captures:
-        1: punctuation.definition.metadata.begin.markdown
+        1: punctuation.definition.metadata.begin.markdown meta.highlight-marker.markdown
         2: markup.highlight.red.markdown
-        3: punctuation.definition.metadata.end.markdown
+        3: punctuation.definition.metadata.end.markdown meta.highlight-marker.markdown
     - match: '(?i)(@@HL\(yellow\)@@)(.*?)(@@ENDHL@@)'
       captures:
-        1: punctuation.definition.metadata.begin.markdown
+        1: punctuation.definition.metadata.begin.markdown meta.highlight-marker.markdown
         2: markup.highlight.yellow.markdown
-        3: punctuation.definition.metadata.end.markdown
+        3: punctuation.definition.metadata.end.markdown meta.highlight-marker.markdown
     - match: '(?i)(@@HL\(blue\)@@)(.*?)(@@ENDHL@@)'
       captures:
-        1: punctuation.definition.metadata.begin.markdown
+        1: punctuation.definition.metadata.begin.markdown meta.highlight-marker.markdown
         2: markup.highlight.blue.markdown
-        3: punctuation.definition.metadata.end.markdown
+        3: punctuation.definition.metadata.end.markdown meta.highlight-marker.markdown
     - match: '(?i)(@@HL\(green\)@@)(.*?)(@@ENDHL@@)'
       captures:
-        1: punctuation.definition.metadata.begin.markdown
+        1: punctuation.definition.metadata.begin.markdown meta.highlight-marker.markdown
         2: markup.highlight.green.markdown
-        3: punctuation.definition.metadata.end.markdown
+        3: punctuation.definition.metadata.end.markdown meta.highlight-marker.markdown
     # no color, an empty one or an unknown name: the default (yellow)
     - match: '(?i)(@@HL(?:\([^)]*\))?@@)(.*?)(@@ENDHL@@)'
       captures:
-        1: punctuation.definition.metadata.begin.markdown
+        1: punctuation.definition.metadata.begin.markdown meta.highlight-marker.markdown
         2: markup.highlight.markdown
-        3: punctuation.definition.metadata.end.markdown
+        3: punctuation.definition.metadata.end.markdown meta.highlight-marker.markdown

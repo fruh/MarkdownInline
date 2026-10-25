@@ -106,3 +106,17 @@ Set-Cookie: <highlight>session=abc123</highlight>
 ```python
 password = "@@HL(red)@@hunter2@@ENDHL@@"
 ```
+
+```text
+Authorization: Bearer <highlight>eyJhbGciOi</highlight>
+```
+
+```text
+@@HL(green)@@a highlight can
+span several lines@@ENDHL@@ in a code block
+```
+
+<codeblock>
+<highlight>and also in
+a codeblock</highlight>
+</codeblock>
