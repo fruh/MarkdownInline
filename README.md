@@ -147,6 +147,10 @@ Sublime merges it over the bundled scheme and reloads it right away.
 | `tag_vulnerable`    | `#ec5f67` | `#vulnerable` tag        |
 | `tag_reported`      | `#4fd1e0` | `#reported` tag          |
 | `tag_falsepositive` | `#8a93a3` | `#falsepositive` tag     |
+| `request_bg`        | `#5b9bd51f` | `<request>` block background |
+| `response_bg`       | `#7fc77f1f` | `<response>` block background |
+| `highlight_bg`      | `#fac761` | `<highlight>` background |
+| `highlight_fg`      | `#1e2227` | `<highlight>` text       |
 
 The scheme also defines `bg`, `fg`, `marker`, `table_border`, `link` and a few
 more that can be overridden the same way. The checkbox color is drawn by the
@@ -170,6 +174,9 @@ dimmed and nothing is rewritten or hidden:
 | `<code>text</code>`         | `` `text` ``      | one line            |
 | `<bold>text</bold>`         | `**text**`        | one line            |
 | `<codeblock>` … `</codeblock>` | a fenced block | own lines           |
+| `<request>` … `</request>`  | code block, blue tint | own lines        |
+| `<response>` … `</response>` | code block, green tint | own lines       |
+| `<highlight>text</highlight>` | yellow highlight | one line, only inside `<codeblock>`, `<request>`, `<response>` |
 | `<list>` … `</list>`        | bullet list       | each line is an item |
 | `<olist>` … `</olist>`      | numbered list     | each line is an item |
 
@@ -179,7 +186,8 @@ part of the text and hide while the cursor is on the line. Turn it off with
 `html_tags`.
 
 To remove the module for good, delete `Markdown Inline HTML.sublime-syntax` and
-`html_tags.py`, then delete the lines marked `HTML-TAGS` in `plugin.py` (use
+`html_tags.py`, the "HTML tags" rules and `request_bg` / `response_bg` /
+`highlight_bg` / `highlight_fg` variables in the color scheme, then delete the lines marked `HTML-TAGS` in `plugin.py` (use
 `SYNTAX` where `overlay_syntax()` is called), the `html_tags` setting and this
 section.
 

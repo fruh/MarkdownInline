@@ -30,7 +30,11 @@
         "tag_done": "#99c794",
         "tag_vulnerable": "#ec5f67",
         "tag_reported": "#4fd1e0",
-        "tag_falsepositive": "#8a93a3"
+        "tag_falsepositive": "#8a93a3",
+        "request_bg": "#5b9bd51f",
+        "response_bg": "#7fc77f1f",
+        "highlight_bg": "#fac761",
+        "highlight_fg": "#1e2227"
     },
 
     "globals": {
@@ -83,6 +87,9 @@
         { "name": "Blockquote", "scope": "markup.quote.markdown", "foreground": "var(quote)", "font_style": "italic" },
         { "name": "Blockquote marker", "scope": "punctuation.definition.blockquote.markdown", "foreground": "var(quote_marker)" },
         { "name": "Fenced code block", "scope": "markup.raw.block.markdown", "background": "#ffffff0a" },
+        { "name": "HTML tags request block", "scope": "meta.block.request.markdown", "background": "var(request_bg)" },
+        { "name": "HTML tags response block", "scope": "meta.block.response.markdown", "background": "var(response_bg)" },
+        { "name": "HTML tags highlight", "scope": "markup.highlight.html.markdown", "foreground": "var(highlight_fg)", "background": "var(highlight_bg)" },
         { "name": "Link text", "scope": "meta.link.inline.markdown string.other.link.title.markdown, meta.link.reference.markdown string.other.link.title.markdown", "foreground": "var(link)", "font_style": "underline" },
         { "name": "Table borders", "scope": "punctuation.separator.table-cell.markdown, meta.table.header-separator.markdown-gfm, punctuation.section.table-header.markdown, punctuation.definition.table-cell-alignment.markdown", "foreground": "var(table_border)" },
         { "name": "Table continuation marker", "scope": "punctuation.definition.continuation.table.markdown", "foreground": "#4b5363" },

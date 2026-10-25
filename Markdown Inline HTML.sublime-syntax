@@ -2,6 +2,7 @@
 ---
 # Optional, removable module: HTML-like tags that look like their Markdown twins.
 #   <code>..</code> `..`     <bold>..</bold> **..**     <codeblock>..</codeblock> ``` block
+#   <request>/<response> tinted raw blocks, <highlight>..</highlight> inside raw blocks
 #   <list>..</list> and <olist>..</olist> (plain lines are items; the bullet or number
 #   is drawn by html_tags.py).
 # Reuses the Markdown scopes so the color scheme needs nothing extra. To remove the
@@ -22,6 +23,16 @@ contexts:
       captures:
         1: punctuation.definition.metadata.begin.markdown
       push: html-codeblock
+    - match: '(?i)^\s*(<request>)\s*$'
+      scope: markup.raw.block.markdown meta.block.request.markdown
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+      push: html-request
+    - match: '(?i)^\s*(<response>)\s*$'
+      scope: markup.raw.block.markdown meta.block.response.markdown
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+      push: html-response
     - match: '(?i)^\s*(<list>)\s*$'
       scope: markup.list.html-unordered.markdown
       captures:
@@ -41,6 +52,35 @@ contexts:
       captures:
         1: punctuation.definition.metadata.end.markdown
       pop: true
+    - include: html-highlight
+
+  html-request:
+    - meta_include_prototype: false
+    - meta_content_scope: markup.raw.block.markdown meta.block.request.markdown
+    - match: '(?i)^\s*(</request>)'
+      scope: markup.raw.block.markdown meta.block.request.markdown
+      captures:
+        1: punctuation.definition.metadata.end.markdown
+      pop: true
+    - include: html-highlight
+
+  html-response:
+    - meta_include_prototype: false
+    - meta_content_scope: markup.raw.block.markdown meta.block.response.markdown
+    - match: '(?i)^\s*(</response>)'
+      scope: markup.raw.block.markdown meta.block.response.markdown
+      captures:
+        1: punctuation.definition.metadata.end.markdown
+      pop: true
+    - include: html-highlight
+
+  # only included by the raw blocks above, so <highlight> is literal text elsewhere
+  html-highlight:
+    - match: '(?i)(<highlight>)(.*?)(</highlight>)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.html.markdown
+        3: punctuation.definition.metadata.end.markdown
 
   html-list:
     - meta_content_scope: markup.list.html-unordered.markdown

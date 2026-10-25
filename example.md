@@ -88,3 +88,13 @@ Second step
 <codeblock>
 print("same look as a fenced block")
 </codeblock>
+
+<request>
+GET /login HTTP/1.1
+Host: example.com
+</request>
+
+<response>
+HTTP/1.1 200 OK
+Set-Cookie: <highlight>session=abc123</highlight>
+</response>
