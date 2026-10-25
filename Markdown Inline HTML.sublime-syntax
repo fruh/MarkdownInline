@@ -53,6 +53,7 @@ contexts:
         1: punctuation.definition.metadata.end.markdown
       pop: true
     - include: html-highlight
+    - include: highlight-markers
 
   html-request:
     - meta_include_prototype: false
@@ -63,6 +64,7 @@ contexts:
         1: punctuation.definition.metadata.end.markdown
       pop: true
     - include: html-highlight
+    - include: highlight-markers
 
   html-response:
     - meta_include_prototype: false
@@ -73,6 +75,7 @@ contexts:
         1: punctuation.definition.metadata.end.markdown
       pop: true
     - include: html-highlight
+    - include: highlight-markers
 
   # only included by the raw blocks above, so <highlight> is literal text elsewhere
   html-highlight:

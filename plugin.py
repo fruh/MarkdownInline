@@ -46,6 +46,10 @@ _native_paste = False  # True while the plugin runs the real paste itself
 HEADING_KEYS = ["markdown_inline_h{}".format(n) for n in range(1, 7)]
 TAGS = ("todo", "done", "vulnerable", "reported", "falsepositive")
 TAG_KEYS = ["markdown_inline_tag_" + t for t in TAGS]
+HL_COLORS = ("yellow", "red", "blue", "green")
+HL_KEYS = ["markdown_inline_hl_" + c for c in HL_COLORS]
+HL_RE = re.compile(r"@@HL(?:\(([^)]*)\))?@@(.*?)@@ENDHL@@", re.I)
+_hl_folded = {}  # view id -> True once highlight markers were folded in that view
 
 
 def plugin_loaded():
@@ -93,15 +97,42 @@ def is_enabled(view):
     return view.settings().get("markdown_inline.enabled", settings().get("auto_enable", True))
 
 
+def fence_highlights(view):
+    """Return ({color: [text regions]}, [marker regions]) for @@HL(color)@@..@@ENDHL@@
+    inside fenced code blocks; the stock syntax hands those to the language syntax, so
+    the overlay syntax cannot scope them."""
+    texts = {c: [] for c in HL_COLORS}
+    markers = []
+    if view.find("@@HL", 0, sublime.LITERAL | sublime.IGNORECASE) is None:
+        return texts, markers
+    in_fence = False
+    for line in view.lines(sublime.Region(0, view.size())):
+        text = view.substr(line)
+        if FENCE_RE.match(text):
+            in_fence = not in_fence
+        elif in_fence and "@@" in text:
+            for m in HL_RE.finditer(text):
+                color = (m.group(1) or "").strip().lower()
+                if color not in texts:
+                    color = "yellow"
+                base = line.begin()
+                texts[color].append(sublime.Region(base + m.start(2), base + m.end(2)))
+                markers.append(sublime.Region(base + m.start(), base + m.start(2)))
+                markers.append(sublime.Region(base + m.end(2), base + m.end()))
+    return texts, markers
+
+
 def clear(view):
     vid = view.id()
     ps = _phantom_sets.pop(vid, None)
     if ps:
         ps.update([])
-    for key in HEADING_KEYS + TAG_KEYS:
+    for key in HEADING_KEYS + TAG_KEYS + HL_KEYS:
         view.erase_regions(key)
     view.unfold(link_url_regions(view))
     _link_folded.pop(vid, None)
+    if _hl_folded.pop(vid, False):
+        view.unfold(fence_highlights(view)[1])
     if view.settings().get("color_scheme") == SCHEME:
         view.settings().erase("color_scheme")
     if view.settings().get("syntax") in (SYNTAX, HTML_SYNTAX):  # HTML-TAGS
@@ -606,6 +637,24 @@ def render(view):
     elif _link_folded.pop(vid, False):
         view.unfold(link_url_regions(view))
 
+    if settings().get("highlight_in_fences", True) and not too_long:
+        # the fill is drawn in the foreground of the "<color>.fill" scope, behind the code
+        texts, markers = fence_highlights(view)
+        for color, key in zip(HL_COLORS, HL_KEYS):
+            view.add_regions(key, texts[color], "markup.highlight.{}.fill.markdown".format(color),
+                             "", sublime.DRAW_NO_OUTLINE)
+        for r in markers:
+            if intersects_selection(view, view.line(r)):
+                view.unfold(r)
+            else:
+                view.fold(r)
+        _hl_folded[vid] = True
+    else:
+        for key in HL_KEYS:
+            view.erase_regions(key)
+        if _hl_folded.pop(vid, False):
+            view.unfold(fence_highlights(view)[1])
+
     ps.update(phantoms)
 
 
@@ -918,6 +967,8 @@ class MarkdownInlineDebugCommand(sublime_plugin.TextCommand):
                 tag, len(regions), style.get("foreground"), style.get("background")))
             for r in regions[:3]:
                 print("    {} scope: {}".format(r, view.scope_name(r.begin()).strip()))
+        print("[MarkdownInline] highlight_in_fences:", settings().get("highlight_in_fences", True),
+              "- fill regions:", {c: len(view.get_regions(k)) for c, k in zip(HL_COLORS, HL_KEYS)})
         sublime.status_message("Markdown Inline: debug info printed to the console")
 
 

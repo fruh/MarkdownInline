@@ -18,6 +18,7 @@ contexts:
   # the # must start the word, so '# Heading' and URL anchors do not match.
   markups:
     - meta_prepend: true
+    - include: highlight-markers
     - match: '(?i)(?<![^\s(])#todo(?![\w-])'
       scope: markup.tag.todo.markdown
     - match: '(?i)(?<![^\s(])#done(?![\w-])'
@@ -28,3 +29,32 @@ contexts:
       scope: markup.tag.reported.markdown
     - match: '(?i)(?<![^\s(])#falsepositive(?![\w-])'
       scope: markup.tag.falsepositive.markdown
+
+  # @@HL(red)@@text@@ENDHL@@ on one line; red, yellow, blue and green, yellow by default
+  highlight-markers:
+    - match: '(?i)(@@HL\(red\)@@)(.*?)(@@ENDHL@@)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.red.markdown
+        3: punctuation.definition.metadata.end.markdown
+    - match: '(?i)(@@HL\(yellow\)@@)(.*?)(@@ENDHL@@)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.yellow.markdown
+        3: punctuation.definition.metadata.end.markdown
+    - match: '(?i)(@@HL\(blue\)@@)(.*?)(@@ENDHL@@)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.blue.markdown
+        3: punctuation.definition.metadata.end.markdown
+    - match: '(?i)(@@HL\(green\)@@)(.*?)(@@ENDHL@@)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.green.markdown
+        3: punctuation.definition.metadata.end.markdown
+    # no color, an empty one or an unknown name: the default (yellow)
+    - match: '(?i)(@@HL(?:\([^)]*\))?@@)(.*?)(@@ENDHL@@)'
+      captures:
+        1: punctuation.definition.metadata.begin.markdown
+        2: markup.highlight.markdown
+        3: punctuation.definition.metadata.end.markdown

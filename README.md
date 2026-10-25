@@ -95,6 +95,7 @@ Settings**, e.g. to stop aligning modified tables on save:
 | `highlight_tags`        | `true`          | Underline the tags #todo, #done, #vulnerable, #reported and #falsepositive in their |
 | ↳                       |                 | color.                                                                              |
 | `fold_links`            | `true`          | Fold link URLs to `…`; shown while the cursor is on the line.                       |
+| `highlight_in_fences`   | `true`          | Color `@@HL@@` highlights inside fenced code blocks.           |
 | `html_tags`             | `true`          | Enable the optional HTML-like tags (see below).                |
 | `heading_rules`         | `true`          | Draw a thin rule under H1/H2 heading lines.                                         |
 | `align_tables_on_leave` | `true`          | Align a table's columns when the cursor leaves it, only if it was edited.           |
@@ -147,6 +148,9 @@ Sublime merges it over the bundled scheme and reloads it right away.
 | `tag_vulnerable`    | `#ec5f67` | `#vulnerable` tag        |
 | `tag_reported`      | `#4fd1e0` | `#reported` tag          |
 | `tag_falsepositive` | `#8a93a3` | `#falsepositive` tag     |
+| `hl_red`            | `#ec5f67` | `@@HL(red)@@` background |
+| `hl_blue`           | `#6699cc` | `@@HL(blue)@@` background |
+| `hl_green`          | `#99c794` | `@@HL(green)@@` background |
 | `request_bg`        | `#5b9bd51f` | `<request>` block background |
 | `response_bg`       | `#7fc77f1f` | `<response>` block background |
 | `highlight_bg`      | `#fac761` | `<highlight>` background |
@@ -163,6 +167,22 @@ The tags `#todo` (orange), `#done` (green), `#vulnerable` (red), `#reported`
 same color. The `#` has to start the word, so `# Heading`, `#anchor` in a URL,
 inline code and code blocks are left alone. The text color comes from the
 `tag_*` variables above; turn the underline off with `highlight_tags`.
+
+## Highlighting
+
+Wrap text in `@@HL(color)@@` … `@@ENDHL@@` to highlight it anywhere: paragraphs,
+lists, headings, tables, the HTML-like raw blocks and fenced code blocks.
+
+```markdown
+@@HL(red)@@red text@@ENDHL@@ and @@HL@@yellow by default@@ENDHL@@
+```
+
+The colors are `red`, `yellow`, `blue` and `green`; `@@HL@@`, `@@HL()@@` and unknown
+names are yellow. The markers are dimmed, and the highlight must close on the same line;
+the text inside is colored but not parsed as Markdown. Inside fenced ``` blocks the text
+keeps its language colors on top of a colored fill and the markers are hidden while the
+cursor is elsewhere (`highlight_in_fences`). Backgrounds come from `highlight_bg`,
+`hl_red`, `hl_blue` and `hl_green`, text from `highlight_fg`.
 
 ## HTML-like tags
 

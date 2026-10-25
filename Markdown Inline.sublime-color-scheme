@@ -34,7 +34,10 @@
         "request_bg": "#5b9bd51f",
         "response_bg": "#7fc77f1f",
         "highlight_bg": "#fac761",
-        "highlight_fg": "#1e2227"
+        "highlight_fg": "#1e2227",
+        "hl_red": "#ec5f67",
+        "hl_blue": "#6699cc",
+        "hl_green": "#99c794"
     },
 
     "globals": {
@@ -90,6 +93,14 @@
         { "name": "HTML tags request block", "scope": "meta.block.request.markdown", "background": "var(request_bg)" },
         { "name": "HTML tags response block", "scope": "meta.block.response.markdown", "background": "var(response_bg)" },
         { "name": "HTML tags highlight", "scope": "markup.highlight.html.markdown", "foreground": "var(highlight_fg)", "background": "var(highlight_bg)" },
+        { "name": "Highlight yellow", "scope": "markup.highlight.yellow.markdown, markup.highlight.markdown", "foreground": "var(highlight_fg)", "background": "var(highlight_bg)" },
+        { "name": "Highlight red", "scope": "markup.highlight.red.markdown", "foreground": "var(highlight_fg)", "background": "var(hl_red)" },
+        { "name": "Highlight blue", "scope": "markup.highlight.blue.markdown", "foreground": "var(highlight_fg)", "background": "var(hl_blue)" },
+        { "name": "Highlight green", "scope": "markup.highlight.green.markdown", "foreground": "var(highlight_fg)", "background": "var(hl_green)" },
+        { "name": "Highlight fill yellow", "scope": "markup.highlight.yellow.fill.markdown", "foreground": "var(highlight_bg)" },
+        { "name": "Highlight fill red", "scope": "markup.highlight.red.fill.markdown", "foreground": "var(hl_red)" },
+        { "name": "Highlight fill blue", "scope": "markup.highlight.blue.fill.markdown", "foreground": "var(hl_blue)" },
+        { "name": "Highlight fill green", "scope": "markup.highlight.green.fill.markdown", "foreground": "var(hl_green)" },
         { "name": "Link text", "scope": "meta.link.inline.markdown string.other.link.title.markdown, meta.link.reference.markdown string.other.link.title.markdown", "foreground": "var(link)", "font_style": "underline" },
         { "name": "Table borders", "scope": "punctuation.separator.table-cell.markdown, meta.table.header-separator.markdown-gfm, punctuation.section.table-header.markdown, punctuation.definition.table-cell-alignment.markdown", "foreground": "var(table_border)" },
         { "name": "Table continuation marker", "scope": "punctuation.definition.continuation.table.markdown", "foreground": "#4b5363" },

@@ -98,3 +98,11 @@ Host: example.com
 HTTP/1.1 200 OK
 Set-Cookie: <highlight>session=abc123</highlight>
 </response>
+
+## Highlighting
+
+@@HL(red)@@red text@@ENDHL@@, @@HL(yellow)@@yellow text@@ENDHL@@, @@HL(blue)@@blue text@@ENDHL@@, @@HL(green)@@green text@@ENDHL@@ and @@HL@@the default@@ENDHL@@.
+
+```python
+password = "@@HL(red)@@hunter2@@ENDHL@@"
+```
